@@ -150,17 +150,53 @@
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web@1.14.0/dist/ort.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@ricky0123/vad-web@0.0.22/dist/bundle.min.js"></script>
     <script type="module">
-        import { App } from "https://unpkg.com/@modelcontextprotocol/sdk@0.6.0/app-with-deps";
+        import { App } from "https://unpkg.com/@modelcontextprotocol/ext-apps@1.7.0/app-with-deps";
 
         const app = new App({
             name: "voice-assistant-ui",
             version: "1.0.0"
         });
 
-        let mediaRecorder;
-        let audioChunks = [];
-        let isRecording = false;
+        const params = new URLSearchParams(window.location.search);
+        const PUBLIC_BACKEND = 'https://marvin.pelayomaojo.es';
+        const isHttpOrigin = window.location.protocol === 'http:' || window.location.protocol === 'https:';
+        const sameOriginCandidate = isHttpOrigin ? window.location.origin : null;
+        const backendBaseUrl = params.get('backend')
+            || (sameOriginCandidate && /marvin\.pelayomaojo\.es|localhost/.test(sameOriginCandidate) ? sameOriginCandidate : PUBLIC_BACKEND);
+
+        // --- Reenvío de logs del navegador al backend (centralizador) ---
+        (function installLogForwarder() {
+            const levels = ['log', 'info', 'warn', 'error', 'debug'];
+            const original = {};
+            const send = (level, args) => {
+                try {
+                    const message = args.map(a => {
+                        if (a instanceof Error) return a.stack || a.message;
+                        if (typeof a === 'object') { try { return JSON.stringify(a); } catch { return String(a); } }
+                        return String(a);
+                    }).join(' ');
+                    fetch(backendBaseUrl + '/api/logs', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ level: level === 'log' ? 'info' : level, message, source: 'voice-app.html' }),
+                        keepalive: true
+                    }).catch(() => {});
+                } catch {}
+            };
+            levels.forEach(lvl => {
+                original[lvl] = console[lvl].bind(console);
+                console[lvl] = (...args) => { send(lvl, args); original[lvl](...args); };
+            });
+            window.addEventListener('error', e => send('error', [e.message, e.filename + ':' + e.lineno]));
+            window.addEventListener('unhandledrejection', e => send('error', ['unhandledrejection', e.reason]));
+        })();
+
+        let vadInstance = null;
+        let isListening = false;
+        let isBusy = false;
 
         const micBtn = document.getElementById('mic-btn');
         const statusEl = document.getElementById('status');
@@ -179,93 +215,164 @@
 
         const bars = document.querySelectorAll('.bar');
 
+        app.ontoolinput = (input) => {
+            const query = input?.arguments?.initialQuery;
+            if (query) {
+                initialQueryEl.textContent = query;
+                initialQueryContainer.style.display = 'block';
+            }
+        };
+
         app.connect().then(async () => {
             subStatusEl.textContent = "Ready";
-            
-            // Try to get initial context/query if the host supports it
-            // In some implementations, the host might send an initial message
-            // or we can call a tool to get the current goal.
         }).catch(err => {
             console.error("MCP Connection failed", err);
-            subStatusEl.textContent = "Connection Failed";
+            subStatusEl.textContent = "Ready for local demo";
         });
 
-        micBtn.addEventListener('click', toggleRecording);
+        micBtn.addEventListener('click', toggleListening);
 
-        async function toggleRecording() {
-            if (isRecording) {
-                stopRecording();
+        async function toggleListening() {
+            if (isListening) {
+                stopListening();
             } else {
-                startRecording();
+                await startListening();
             }
         }
 
-        async function startRecording() {
+        async function startListening() {
             try {
-                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                mediaRecorder = new MediaRecorder(stream);
-                audioChunks = [];
-
-                mediaRecorder.ondataavailable = (event) => {
-                    audioChunks.push(event.data);
-                };
-
-                mediaRecorder.onstop = processAudio;
-
-                mediaRecorder.start();
-                isRecording = true;
-                micBtn.classList.add('active');
-                statusEl.textContent = "Listening...";
-                subStatusEl.textContent = "Recording your voice";
-                
-                startVisualizer(stream);
-            } catch (err) {
-                console.error("Mic access denied", err);
-                statusEl.textContent = "Error";
-                subStatusEl.textContent = "Microphone access denied";
-            }
-        }
-
-        function stopRecording() {
-            mediaRecorder.stop();
-            isRecording = false;
-            micBtn.classList.remove('active');
-            statusEl.textContent = "Processing...";
-            subStatusEl.textContent = "Analyzing audio";
-            stopVisualizer();
-        }
-
-        async function processAudio() {
-            const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
-            const reader = new FileReader();
-            reader.readAsDataURL(audioBlob);
-            reader.onloadend = async () => {
-                const base64Audio = reader.result.split(',')[1];
-                
-                try {
-                    // Send to MCP Server
-                    const result = await app.callServerTool({
-                        name: "process-voice",
-                        arguments: {
-                            audio: base64Audio
+                if (!vadInstance) {
+                    statusEl.textContent = "Loading…";
+                    subStatusEl.textContent = "Initializing voice detector";
+                    const cdn = "https://cdn.jsdelivr.net/npm/@ricky0123/vad-web@0.0.22/dist/";
+                    vadInstance = await vad.MicVAD.new({
+                        baseAssetPath: cdn,
+                        onnxWASMBasePath: "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.14.0/dist/",
+                        positiveSpeechThreshold: 0.7,
+                        negativeSpeechThreshold: 0.5,
+                        minSpeechFrames: 4,
+                        redemptionFrames: 12,
+                        onSpeechStart: () => {
+                            if (isBusy) return;
+                            statusEl.textContent = "Listening…";
+                            subStatusEl.textContent = "Speech detected";
+                        },
+                        onSpeechEnd: async (audio) => {
+                            if (isBusy) return;
+                            isBusy = true;
+                            try {
+                                statusEl.textContent = "Processing…";
+                                subStatusEl.textContent = "Sending to backend";
+                                await sendUtterance(audio);
+                            } finally {
+                                isBusy = false;
+                                if (isListening) {
+                                    statusEl.textContent = "Listening…";
+                                    subStatusEl.textContent = "Channel open";
+                                }
+                            }
+                        },
+                        onVADMisfire: () => {
+                            if (isListening && !isBusy) {
+                                subStatusEl.textContent = "Channel open";
+                            }
                         }
                     });
-
-                    if (result && result.content) {
-                        const response = result.content[0].text;
-                        transcriptEl.textContent = response;
-                        
-                        // If there is audio in the response (hypothetical extension)
-                        // we would play it here.
-                        statusEl.textContent = "Assistant Replied";
-                        subStatusEl.textContent = "Task complete";
-                    }
-                } catch (err) {
-                    console.error("Tool call failed", err);
-                    statusEl.textContent = "Error";
-                    subStatusEl.textContent = "Could not process audio";
                 }
-            };
+                vadInstance.start();
+                isListening = true;
+                micBtn.classList.add('active');
+                statusEl.textContent = "Listening…";
+                subStatusEl.textContent = "Channel open";
+            } catch (err) {
+                console.error("VAD init failed", err);
+                statusEl.textContent = "Error";
+                subStatusEl.textContent = "Microphone or VAD failed";
+            }
+        }
+
+        function stopListening() {
+            if (vadInstance) vadInstance.pause();
+            isListening = false;
+            micBtn.classList.remove('active');
+            statusEl.textContent = "Idle";
+            subStatusEl.textContent = "Channel closed";
+        }
+
+        async function sendUtterance(float32Pcm16k) {
+            const wavBlob = encodeWav(float32Pcm16k, 16000);
+            const base64Audio = await blobToBase64(wavBlob);
+            try {
+                const response = await fetch(`${backendBaseUrl}/api/voice/process`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ audio: base64Audio, mimeType: 'audio/wav' })
+                });
+                if (!response.ok) throw new Error(`Backend returned ${response.status}`);
+                const result = await response.json();
+                transcriptEl.textContent = result.text || '';
+                playAssistantAudio(result.audio, result.audioMimeType || 'audio/wav');
+            } catch (err) {
+                console.error("Voice processing failed", err);
+                subStatusEl.textContent = "Backend error: " + err.message;
+            }
+        }
+
+        function blobToBase64(blob) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onloadend = () => resolve(String(reader.result).split(',')[1]);
+                reader.onerror = reject;
+                reader.readAsDataURL(blob);
+            });
+        }
+
+        function encodeWav(samples, sampleRate) {
+            const buffer = new ArrayBuffer(44 + samples.length * 2);
+            const view = new DataView(buffer);
+            const writeStr = (off, s) => { for (let i = 0; i < s.length; i++) view.setUint8(off + i, s.charCodeAt(i)); };
+            writeStr(0, 'RIFF');
+            view.setUint32(4, 36 + samples.length * 2, true);
+            writeStr(8, 'WAVE');
+            writeStr(12, 'fmt ');
+            view.setUint32(16, 16, true);
+            view.setUint16(20, 1, true);
+            view.setUint16(22, 1, true);
+            view.setUint32(24, sampleRate, true);
+            view.setUint32(28, sampleRate * 2, true);
+            view.setUint16(32, 2, true);
+            view.setUint16(34, 16, true);
+            writeStr(36, 'data');
+            view.setUint32(40, samples.length * 2, true);
+            let offset = 44;
+            for (let i = 0; i < samples.length; i++, offset += 2) {
+                const s = Math.max(-1, Math.min(1, samples[i]));
+                view.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7fff, true);
+            }
+            return new Blob([view], { type: 'audio/wav' });
+        }
+
+        function playAssistantAudio(base64Audio, mimeType) {
+            if (!base64Audio) {
+                return;
+            }
+
+            const audio = new Audio(`data:${mimeType};base64,${base64Audio}`);
+            audio.play().catch(err => {
+                console.warn("Audio playback failed", err);
+            });
+        }
+
+        function preferredRecordingMimeType() {
+            const candidates = [
+                'audio/webm;codecs=opus',
+                'audio/webm',
+                'audio/ogg;codecs=opus',
+                'audio/mp4'
+            ];
+
+            return candidates.find(type => MediaRecorder.isTypeSupported(type)) || '';
         }
 
         let audioContext, analyser, dataArray, animationId;

@@ -26,10 +26,15 @@ public class SpringAiChatbotAdapter implements ChatbotPort {
 
     @Override
     public String transcribe(byte[] userAudioInput) {
+        return transcribe(userAudioInput, "audio.wav");
+    }
+
+    @Override
+    public String transcribe(byte[] userAudioInput, String audioFilename) {
         Resource audioResource = new ByteArrayResource(userAudioInput) {
             @Override
             public String getFilename() {
-                return "audio.wav";
+                return audioFilename;
             }
         };
         

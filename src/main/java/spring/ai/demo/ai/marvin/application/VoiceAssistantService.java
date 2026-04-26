@@ -63,12 +63,16 @@ public class VoiceAssistantService {
     }
 
     public AssistantMessage processAudioBytes(byte[] userAudio) {
+        return processAudioBytes(userAudio, "audio.wav");
+    }
+
+    public AssistantMessage processAudioBytes(byte[] userAudio, String audioFilename) {
         if (userAudio == null || userAudio.length == 0) {
             throw new IllegalStateException("No audio recorded to process.");
         }
         
         // 1. Transcribir Voz a Texto
-        String transcription = chatbotPort.transcribe(userAudio);
+        String transcription = chatbotPort.transcribe(userAudio, audioFilename);
         System.out.println("\n[TRANSCRIPCIÓN]: " + transcription);
         
         // 2. Buscar Contexto
@@ -77,6 +81,18 @@ public class VoiceAssistantService {
         
         // 3. Consultar al LLM con el Contexto
         return chatbotPort.exchange(transcription, relevantDocs);
+    }
+
+    public VoiceAssistantExchange processAudioBytesAndSynthesize(byte[] userAudio) {
+        return processAudioBytesAndSynthesize(userAudio, "audio.wav");
+    }
+
+    public VoiceAssistantExchange processAudioBytesAndSynthesize(byte[] userAudio, String audioFilename) {
+        AssistantMessage assistantMessage = processAudioBytes(userAudio, audioFilename);
+        String responseText = assistantMessage.getText() != null ? assistantMessage.getText() : "";
+        byte[] audioData = responseText.isBlank() ? new byte[0] : ttsPort.synthesize(responseText);
+
+        return new VoiceAssistantExchange(responseText, audioData != null ? audioData : new byte[0]);
     }
 
     public void playAssistantResponse(AssistantMessage assistantMessage) {

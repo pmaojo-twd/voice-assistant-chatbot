@@ -1,0 +1,37 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(netstat -ano)",
+      "Bash(tasklist)",
+      "Bash(wmic process *)",
+      "PowerShell(Get-CimInstance Win32_Process -Filter \"Name='java.exe'\")",
+      "Bash(./mvnw spring-boot:run)",
+      "Bash(./mvnw -q spring-boot:run)",
+      "WebFetch(domain:spring.io)",
+      "WebFetch(domain:github.com)",
+      "WebSearch",
+      "Bash(curl -s http://localhost:8080/v1/models)",
+      "Bash(curl -s http://localhost:8080/ -o /dev/null -w \"HTTP %{http_code}\\\\n\")",
+      "Bash(curl -s http://localhost:8080/version)",
+      "Bash(curl -s http://localhost:8080/readyz)",
+      "Bash(curl -s -X GET http://localhost:8080/inference -o /dev/null -w \"inference HTTP %{http_code}\\\\n\")",
+      "Bash(curl -s -X POST http://localhost:8080/models/apply -H \"Content-Type: application/json\" -d '{\"id\":\"whisper-base\"}')",
+      "Bash(awk '{print $5}')",
+      "Bash(taskkill //PID 6872 //F)",
+      "Bash(cloudflared tunnel *)",
+      "Bash(curl -sX POST https://marvin.pelayomaojo.es/mcp -H \"Content-Type: application/json\" -H \"Accept: application/json, text/event-stream\" -d '{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"initialize\",\"params\":{\"protocolVersion\":\"2025-06-18\",\"capabilities\":{},\"clientInfo\":{\"name\":\"test\",\"version\":\"1\"}}}')",
+      "WebFetch(domain:mcpui.dev)",
+      "Bash(unzip -l ~/.m2/repository/io/modelcontextprotocol/sdk/mcp-core/1.1.0/mcp-core-1.1.0.jar)",
+      "Bash(javap -classpath '~/.m2/repository/io/modelcontextprotocol/sdk/mcp-core/1.1.0/mcp-core-1.1.0.jar' 'io.modelcontextprotocol.spec.McpSchema$EmbeddedResource' 'io.modelcontextprotocol.spec.McpSchema$TextResourceContents' 'io.modelcontextprotocol.spec.McpSchema$CallToolResult')",
+      "Bash(javap org/springframework/ai/mcp/annotation/McpTool.class)",
+      "Bash(curl -s -o /dev/null -w \"tunnel /mcp -> %{http_code}\\\\n\" https://marvin.pelayomaojo.es/mcp)",
+      "Read(//tmp/**)",
+      "Bash(unzip -qo ~/.m2/repository/org/springframework/ai/spring-ai-mcp-annotations/2.0.0-M4/spring-ai-mcp-annotations-2.0.0-M4.jar 'org/springframework/ai/mcp/annotation/context/*.class')",
+      "Bash(javap org/springframework/ai/mcp/annotation/context/MetaProvider.class)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:8081/app/voice-app.html)",
+      "Bash(printf 'RIFF\\\\x24\\\\x00\\\\x00\\\\x00WAVEfmt \\\\x10\\\\x00\\\\x00\\\\x00\\\\x01\\\\x00\\\\x01\\\\x00\\\\x80\\\\x3e\\\\x00\\\\x00\\\\x00}\\\\x00\\\\x00\\\\x02\\\\x00\\\\x10\\\\x00data\\\\x00\\\\x00\\\\x00\\\\x00')",
+      "Bash(curl -s -o /tmp/r -w '%{http_code} ' -X POST http://localhost:8080/v1/audio/transcriptions -F file=@/tmp/empty.wav -F model=whisper-base -F response_format=__TRACKED_VAR__)",
+      "Bash(grep -E \"\\\\.ts$|\\\\.py$|\\\\.js$|src|mcp\")"
+    ]
+  }
+}

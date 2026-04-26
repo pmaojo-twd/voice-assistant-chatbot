@@ -14,6 +14,7 @@ import spring.ai.demo.ai.marvin.domain.port.TtsPort;
 
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
@@ -68,14 +69,14 @@ class VoiceAssistantServiceTest {
         AssistantMessage mockResponse = new AssistantMessage("Hello!");
 
         when(audioPort.getLastRecording()).thenReturn(mockAudio);
-        when(chatbotPort.transcribe(mockAudio)).thenReturn(mockTranscription);
+        when(chatbotPort.transcribe(mockAudio, "audio.wav")).thenReturn(mockTranscription);
         when(knowledgePort.findSimilarDocuments(mockTranscription)).thenReturn(mockDocs);
         when(chatbotPort.exchange(mockTranscription, mockDocs)).thenReturn(mockResponse);
 
         AssistantMessage result = voiceAssistantService.processUserAudioAndGetResponse();
 
         assertEquals(mockResponse, result);
-        verify(chatbotPort, times(1)).transcribe(mockAudio);
+        verify(chatbotPort, times(1)).transcribe(mockAudio, "audio.wav");
         verify(knowledgePort, times(1)).findSimilarDocuments(mockTranscription);
         verify(chatbotPort, times(1)).exchange(mockTranscription, mockDocs);
     }
@@ -99,5 +100,23 @@ class VoiceAssistantServiceTest {
         when(ttsPort.synthesize(responseText)).thenReturn(audioData);
         voiceAssistantService.playAssistantResponse(mockResponse);
         verify(audioPort, times(1)).play(audioData);
+    }
+
+    @Test
+    void shouldProcessBrowserAudioWithOriginalFilenameAndSynthesizeResponse() {
+        byte[] browserAudio = new byte[]{8, 9, 10};
+        List<Document> mockDocs = List.of(Document.builder().text("Contexto").build());
+        AssistantMessage mockResponse = new AssistantMessage("Respuesta");
+        byte[] assistantAudio = new byte[]{11, 12};
+
+        when(chatbotPort.transcribe(browserAudio, "audio.webm")).thenReturn("Pregunta");
+        when(knowledgePort.findSimilarDocuments("Pregunta")).thenReturn(mockDocs);
+        when(chatbotPort.exchange("Pregunta", mockDocs)).thenReturn(mockResponse);
+        when(ttsPort.synthesize("Respuesta")).thenReturn(assistantAudio);
+
+        VoiceAssistantExchange result = voiceAssistantService.processAudioBytesAndSynthesize(browserAudio, "audio.webm");
+
+        assertEquals("Respuesta", result.text());
+        assertArrayEquals(assistantAudio, result.audio());
     }
 }

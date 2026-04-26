@@ -11,6 +11,13 @@ public interface ChatbotPort {
     String transcribe(byte[] userAudioInput);
 
     /**
+     * Transcribe audio bytes preserving the original browser/container filename.
+     */
+    default String transcribe(byte[] userAudioInput, String audioFilename) {
+        return transcribe(userAudioInput);
+    }
+
+    /**
      * Sends a text query to the chatbot along with relevant context from the knowledge base.
      * @return An AssistantMessage containing the response.
      */

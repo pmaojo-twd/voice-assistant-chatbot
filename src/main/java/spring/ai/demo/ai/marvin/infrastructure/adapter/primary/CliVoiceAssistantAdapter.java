@@ -17,10 +17,12 @@ package spring.ai.demo.ai.marvin.infrastructure.adapter.primary;
 
 import org.springframework.ai.chat.messages.AssistantMessage;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 import spring.ai.demo.ai.marvin.application.VoiceAssistantService;
 
 @Component
+@ConditionalOnProperty(name = "voice-assistant.cli.enabled", havingValue = "true")
 public class CliVoiceAssistantAdapter implements CommandLineRunner {
 
     private final VoiceAssistantService voiceAssistantService;
