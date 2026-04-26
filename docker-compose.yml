@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  localai-whisper:
+    image: localai/localai:latest
+    container_name: localai-stt
+    command: audio-to-text
+    ports:
+      - "8080:8080"
+
+  kokoro-tts:
+    image: ghcr.io/remsky/kokoro-fastapi-cpu:latest
+    container_name: kokoro-tts
+    ports:
+      - "8880:8880"
