@@ -1,0 +1,94 @@
+import { Meta } from "@storybook/blocks";
+
+<Meta title="Guia de Diseno/03 Principios MCP Apps" />
+
+# Principios de diseno aplicados a MCP Apps
+
+Estas reglas aterrizan como disenar UI dentro de una conversacion.
+
+## 1) Extraer, no portar
+
+**Aplicado:** una tarjeta para confirmar una accion o elegir entre opciones concretas.  
+**No aplicado:** meter un dashboard entero con navegacion profunda dentro del chat.
+
+## 2) Conversacion primero
+
+**Aplicado:** respuestas cortas, acciones declarativas y siguientes pasos sugeridos.  
+**No aplicado:** textos largos sin CTA ni direccion clara.
+
+## 3) Jerarquia de modos
+
+- `Inline`: micro tareas, feedback rapido, confirmaciones.
+- `Carousel`: comparacion de alternativas.
+- `Fullscreen`: tareas ricas o de multiples pasos.
+
+## 4) Estado visible en todo momento
+
+El usuario debe saber siempre si la herramienta esta:
+
+- lista para actuar
+- ejecutando una accion
+- completada
+- bloqueada por error recuperable
+
+## 5) Accesibilidad operativa
+
+- Foco de teclado visible (`ring`).
+- Contraste consistente en claro/oscuro via tokens.
+- Etiquetas y texto de accion explicitos.
+
+## Patron recomendado para una card inline
+
+<div
+  style={{
+    border: "1px solid var(--border)",
+    background: "var(--card)",
+    color: "var(--card-foreground)",
+    borderRadius: "var(--radius-lg)",
+    padding: "16px",
+    maxWidth: "460px",
+  }}
+>
+  <p style={{ margin: 0, fontSize: "12px", color: "var(--muted-foreground)" }}>
+    Estado: listo para ejecutar
+  </p>
+  <h3 style={{ margin: "8px 0 6px", fontSize: "16px", fontWeight: 600 }}>
+    Buscar archivos del proyecto
+  </h3>
+  <p style={{ margin: "0 0 12px", fontSize: "14px" }}>
+    Escanea carpetas clave y devuelve un resumen util para continuar el chat.
+  </p>
+  <div style={{ display: "flex", gap: "8px" }}>
+    <button
+      style={{
+        border: "1px solid var(--primary)",
+        background: "var(--primary)",
+        color: "var(--primary-foreground)",
+        borderRadius: "calc(var(--radius) - 2px)",
+        padding: "6px 10px",
+        fontSize: "13px",
+      }}
+    >
+      Ejecutar
+    </button>
+    <button
+      style={{
+        border: "1px solid var(--border)",
+        background: "var(--secondary)",
+        color: "var(--secondary-foreground)",
+        borderRadius: "calc(var(--radius) - 2px)",
+        padding: "6px 10px",
+        fontSize: "13px",
+      }}
+    >
+      Ver detalle
+    </button>
+  </div>
+</div>
+
+## Mapeo rapido: principio -> componente
+
+- Extraer, no portar -> `InlineCard`
+- Comparar opciones -> `InlineCarousel`
+- Flujo complejo -> `FullscreenView`
+- Feedback de estado -> `Alert`, `Badge`

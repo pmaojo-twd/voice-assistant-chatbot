@@ -1,0 +1,59 @@
+import { Meta } from "@storybook/blocks";
+
+<Meta title="Guia de Diseno/07 Sombras" />
+
+# Sombras (elevación)
+
+Tokens de elevación de Tailwind. Úsalos para comunicar profundidad jerárquica
+de una superficie respecto al fondo.
+
+## Escala
+
+<div
+  style={{
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))",
+    gap: "24px",
+    padding: "24px 0",
+  }}
+>
+  {[
+    { name: "shadow-sm", className: "shadow-sm" },
+    { name: "shadow", className: "shadow" },
+    { name: "shadow-md", className: "shadow-md" },
+    { name: "shadow-lg", className: "shadow-lg" },
+    { name: "shadow-xl", className: "shadow-xl" },
+    { name: "shadow-2xl", className: "shadow-2xl" },
+    { name: "shadow-inner", className: "shadow-inner" },
+    { name: "shadow-none", className: "shadow-none" },
+  ].map((s) => (
+    <div key={s.name} style={{ textAlign: "center" }}>
+      <div
+        className={s.className}
+        style={{
+          height: "80px",
+          borderRadius: "12px",
+          background: "var(--card)",
+          border: "1px solid var(--border)",
+        }}
+      />
+      <code style={{ fontSize: "12px", marginTop: "8px", display: "block" }}>
+        {s.name}
+      </code>
+    </div>
+  ))}
+</div>
+
+## Cuándo usar
+
+- **`shadow-sm`** — controles que necesitan separarse sutilmente del fondo (botones secundarios, inputs).
+- **`shadow` / `shadow-md`** — tarjetas de contenido sobre el fondo principal.
+- **`shadow-lg`** — popovers, dropdowns y selects.
+- **`shadow-xl`** — diálogos modales.
+- **`shadow-2xl`** — solo para overlays de gran impacto (full-screen modals).
+- **`shadow-inner`** — superficies hundidas (campos de búsqueda con tratamiento inset).
+
+## Reglas
+
+- No mezcles más de 2 niveles de elevación en la misma vista.
+- En modo oscuro las sombras pierden contraste; refuérzalas con `ring-1 ring-foreground/10`.

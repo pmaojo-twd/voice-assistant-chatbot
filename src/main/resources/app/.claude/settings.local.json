@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx tsc *)",
+      "Bash(ls src/locales/)",
+      "Bash(ls public/locales/)",
+      "Bash(make help *)",
+      "Bash(command -v cloudflared)",
+      "Bash(command -v ngrok)",
+      "Bash(command -v bun)",
+      "Bash(cloudflared --version)",
+      "Bash(ngrok version *)",
+      "Read(//c/Users/Pelayo/.cloudflared/**)",
+      "Bash(cloudflared tunnel *)",
+      "Bash(sc query *)",
+      "Bash(tasklist)",
+      "PowerShell(Stop-Process -Id 30580 -Force)"
+    ]
+  }
+}

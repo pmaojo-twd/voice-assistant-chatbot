@@ -1,0 +1,118 @@
+import { Meta, ColorPalette, ColorItem, Typeset } from "@storybook/blocks";
+import {
+  tripilotsColorGroups,
+  tripilotsShadows,
+  tripilotsSpacing,
+  tripilotsTypography,
+  tripilotsTypeScale,
+} from "../../src/tokens";
+
+<Meta title="Tripilots Design System/01 Tokens" />
+
+# Tripilots design tokens
+
+Estos tokens son la base troncal del Storybook de Tripilots. Documentan la direccion visual pedida en el roadmap y quedan separados del tema actual de la app para no romper la UI productiva mientras construimos el design system.
+
+## Color palette
+
+{tripilotsColorGroups.map((group) => (
+  <div key={group.name}>
+    <h2>{group.name}</h2>
+    <ColorPalette>
+      {Object.entries(group.values).map(([name, value]) => (
+        <ColorItem
+          key={`${group.name}-${name}`}
+          title={name}
+          subtitle={value}
+          colors={{ Base: value }}
+        />
+      ))}
+    </ColorPalette>
+  </div>
+))}
+
+## Typography
+
+<Typeset
+  fontFamily={tripilotsTypography.font.body}
+  fontSizes={tripilotsTypeScale.map((item) => item.size)}
+  fontWeight={400}
+  sampleText="Tripilots design system 123"
+/>
+
+<table>
+  <thead>
+    <tr>
+      <th>Token</th>
+      <th>Size</th>
+      <th>Weight</th>
+      <th>Line height</th>
+      <th>Letter spacing</th>
+    </tr>
+  </thead>
+  <tbody>
+    {tripilotsTypeScale.map((item) => (
+      <tr key={item.name}>
+        <td>{item.name}</td>
+        <td>{item.size}</td>
+        <td>{item.weight}</td>
+        <td>{item.lineHeight}</td>
+        <td>{item.spacing}</td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
+## Font families
+
+- Display: `{tripilotsTypography.font.display}`
+- Body: `{tripilotsTypography.font.body}`
+- Mono: `{tripilotsTypography.font.mono}`
+
+## Spacing scale
+
+<table>
+  <thead>
+    <tr>
+      <th>Token</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    {Object.entries(tripilotsSpacing).map(([name, value]) => (
+      <tr key={name}>
+        <td>{name}</td>
+        <td>{value}</td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
+## Shadows
+
+<table>
+  <thead>
+    <tr>
+      <th>Token</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    {Object.entries(tripilotsShadows).map(([name, value]) => (
+      <tr key={name}>
+        <td>{name}</td>
+        <td>
+          <code>{value}</code>
+        </td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
+## Usage rules
+
+- `navy` define surfaces premium, navegacion y texto de alta jerarquia.
+- `gold` solo para acento de lujo, estados premium y CTA muy medidos.
+- `sand` sirve de fondo calido, no de color de accion.
+- `status` se mantiene semantico y no se reutiliza como branding.
+- `luxury` shadow se reserva para highlights, no para todo el sistema.

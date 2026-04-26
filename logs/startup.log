@@ -1,0 +1,393 @@
+ ???????? ???? ???????  ?? ????     ??? ?????                                    
+??   ?? ???? ??  ?  ????????       ?? ??  ?                                      
+ ???????? ?????  ?  ?? ????????    ?????  ?                                      
+???????   ?? ?????????  ???????    ?? ???????                                    
+????  ??? ????  ??? ??  ?? ??? ?????????      ??? ??  ?????? ????  ??? ????????? 
+?? ???? ???? ???? ?????????? ??  ?  ??  ?    ?? ??????????  ??? ???? ??  ?  ??  ?
+???? ????????????????? ????? ??  ?  ??  ?    ??????? ?????  ???????? ??  ?  ??  ?
+??   ?? ???? ???? ????  ?????????????????    ?? ????  ????????? ?????????????????
+:/Spring AI:1.0.0-SNAPSHOT/Spring Boot:4.0.6
+
+2026-04-26T15:28:06.844+01:00  INFO 55844 --- [voice-assistant-chatbot] [           main] s.a.d.a.m.VoiceAssistantApplication      : Starting VoiceAssistantApplication using Java 21.0.10 with PID 55844 (C:\Users\Pelayo\Proyectos\voice-assistant-chatbot\target\classes started by Pelayo in C:\Users\Pelayo\Proyectos\voice-assistant-chatbot)
+2026-04-26T15:28:06.852+01:00 DEBUG 55844 --- [voice-assistant-chatbot] [           main] s.a.d.a.m.VoiceAssistantApplication      : Running with Spring Boot v4.0.6, Spring v7.0.7
+2026-04-26T15:28:06.852+01:00  INFO 55844 --- [voice-assistant-chatbot] [           main] s.a.d.a.m.VoiceAssistantApplication      : No active profile set, falling back to 1 default profile: "default"
+2026-04-26T15:28:07.505+01:00  WARN 55844 --- [voice-assistant-chatbot] [           main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.ai.mcp.server.common.autoconfigure.annotations.McpServerAnnotationScannerAutoConfiguration' of type [org.springframework.ai.mcp.server.common.autoconfigure.annotations.McpServerAnnotationScannerAutoConfiguration] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). Is this bean getting eagerly injected/applied to a currently created BeanPostProcessor [serverAnnotatedMethodBeanPostProcessor]? Check the corresponding BeanPostProcessor declaration and its dependencies/advisors. If this bean does not have to be post-processed, declare it with ROLE_INFRASTRUCTURE.
+2026-04-26T15:28:07.508+01:00  WARN 55844 --- [voice-assistant-chatbot] [           main] trationDelegate$BeanPostProcessorChecker : Bean 'serverAnnotatedBeanRegistry' of type [org.springframework.ai.mcp.server.common.autoconfigure.annotations.McpServerAnnotationScannerAutoConfiguration$ServerMcpAnnotatedBeans] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). Is this bean getting eagerly injected/applied to a currently created BeanPostProcessor [serverAnnotatedMethodBeanPostProcessor]? Check the corresponding BeanPostProcessor declaration and its dependencies/advisors. If this bean does not have to be post-processed, declare it with ROLE_INFRASTRUCTURE.
+2026-04-26T15:28:07.515+01:00  WARN 55844 --- [voice-assistant-chatbot] [           main] trationDelegate$BeanPostProcessorChecker : Bean 'spring.ai.mcp.server.annotation-scanner-org.springframework.ai.mcp.server.common.autoconfigure.annotations.McpServerAnnotationScannerProperties' of type [org.springframework.ai.mcp.server.common.autoconfigure.annotations.McpServerAnnotationScannerProperties] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). Is this bean getting eagerly injected/applied to a currently created BeanPostProcessor [serverAnnotatedMethodBeanPostProcessor]? Check the corresponding BeanPostProcessor declaration and its dependencies/advisors. If this bean does not have to be post-processed, declare it with ROLE_INFRASTRUCTURE.
+2026-04-26T15:28:07.659+01:00  INFO 55844 --- [voice-assistant-chatbot] [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8081 (http)
+2026-04-26T15:28:07.671+01:00  INFO 55844 --- [voice-assistant-chatbot] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-04-26T15:28:07.671+01:00  INFO 55844 --- [voice-assistant-chatbot] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.21]
+2026-04-26T15:28:07.711+01:00  INFO 55844 --- [voice-assistant-chatbot] [           main] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 826 ms
+2026-04-26T15:28:08.502+01:00  INFO 55844 --- [voice-assistant-chatbot] [           main] o.s.a.m.s.c.a.McpServerAutoConfiguration : Enable tools capabilities, notification: true
+2026-04-26T15:28:08.503+01:00  INFO 55844 --- [voice-assistant-chatbot] [           main] o.s.a.m.s.c.a.McpServerAutoConfiguration : Registered tools: 2
+2026-04-26T15:28:08.503+01:00  INFO 55844 --- [voice-assistant-chatbot] [           main] o.s.a.m.s.c.a.McpServerAutoConfiguration : Enable resources capabilities, notification: true
+2026-04-26T15:28:08.504+01:00  INFO 55844 --- [voice-assistant-chatbot] [           main] o.s.a.m.s.c.a.McpServerAutoConfiguration : Registered resources: 1
+2026-04-26T15:28:08.504+01:00  INFO 55844 --- [voice-assistant-chatbot] [           main] o.s.a.m.s.c.a.McpServerAutoConfiguration : Enable resources templates capabilities, notification: true
+2026-04-26T15:28:08.505+01:00  INFO 55844 --- [voice-assistant-chatbot] [           main] o.s.a.m.s.c.a.McpServerAutoConfiguration : Enable prompts capabilities, notification: true
+2026-04-26T15:28:08.505+01:00  INFO 55844 --- [voice-assistant-chatbot] [           main] o.s.a.m.s.c.a.McpServerAutoConfiguration : Enable completions capabilities
+2026-04-26T15:28:08.684+01:00  INFO 55844 --- [voice-assistant-chatbot] [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2026-04-26T15:28:08.733+01:00  INFO 55844 --- [voice-assistant-chatbot] [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 8081 (http) with context path '/'
+2026-04-26T15:28:08.739+01:00  INFO 55844 --- [voice-assistant-chatbot] [           main] s.a.d.a.m.VoiceAssistantApplication      : Started VoiceAssistantApplication in 2.209 seconds (process running for 2.47)
+2026-04-26T15:28:20.098+01:00  INFO 55844 --- [voice-assistant-chatbot] [nio-8081-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-04-26T15:28:20.099+01:00  INFO 55844 --- [voice-assistant-chatbot] [nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-04-26T15:28:20.101+01:00  INFO 55844 --- [voice-assistant-chatbot] [nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2026-04-26T15:28:20.185+01:00  INFO 55844 --- [voice-assistant-chatbot] [nio-8081-exec-1] i.m.server.McpAsyncServer                : Client initialize request - Protocol: 2025-11-25, Capabilities: ClientCapabilities[experimental=null, roots=null, sampling=null, elicitation=null], Info: Implementation[name=Anthropic/ClaudeAI, title=null, version=1.0.0]
+2026-04-26T15:28:28.320+01:00  INFO 55844 --- [voice-assistant-chatbot] [nio-8081-exec-2] i.m.server.McpAsyncServer                : Client initialize request - Protocol: 2025-06-18, Capabilities: ClientCapabilities[experimental=null, roots=null, sampling=null, elicitation=null], Info: Implementation[name=t, title=null, version=1]
+2026-04-26T15:30:00.524+01:00  INFO 55844 --- [voice-assistant-chatbot] [nio-8081-exec-9] i.m.server.McpAsyncServer                : Client initialize request - Protocol: 2025-11-25, Capabilities: ClientCapabilities[experimental=null, roots=null, sampling=null, elicitation=null], Info: Implementation[name=Anthropic/ClaudeAI, title=null, version=1.0.0]
+2026-04-26T15:30:02.127+01:00  INFO 55844 --- [voice-assistant-chatbot] [nio-8081-exec-5] i.m.server.McpAsyncServer                : Client initialize request - Protocol: 2025-11-25, Capabilities: ClientCapabilities[experimental=null, roots=null, sampling=null, elicitation=null], Info: Implementation[name=claude-ai, title=null, version=0.1.0]
+2026-04-26T15:30:12.868+01:00  INFO 55844 --- [voice-assistant-chatbot] [nio-8081-exec-2] i.m.server.McpAsyncServer                : Client initialize request - Protocol: 2025-11-25, Capabilities: ClientCapabilities[experimental=null, roots=null, sampling=null, elicitation=Elicitation[form=null, url=null]], Info: Implementation[name=__guest__, title=null, version=1.0.0]
+2026-04-26T15:30:13.426+01:00  INFO 55844 --- [voice-assistant-chatbot] [nio-8081-exec-7] i.m.server.McpAsyncServer                : Client initialize request - Protocol: 2025-11-25, Capabilities: ClientCapabilities[experimental=null, roots=null, sampling=null, elicitation=Elicitation[form=null, url=null]], Info: Implementation[name=__guest__, title=null, version=1.0.0]
+2026-04-26T15:30:13.937+01:00 DEBUG 55844 --- [voice-assistant-chatbot] [nio-8081-exec-2] frontend                                 : [voice-app.html] Sending message {"method":"ui/initialize","params":{"appCapabilities":{},"appInfo":{"name":"voice-assistant-ui","version":"1.0.0"},"protocolVersion":"2026-01-26"},"jsonrpc":"2.0","id":0}
+2026-04-26T15:30:13.973+01:00 DEBUG 55844 --- [voice-assistant-chatbot] [nio-8081-exec-4] frontend                                 : [voice-app.html] Ignoring non-JSON-RPC message [
+  {
+    "code": "invalid_union",
+    "errors": [
+      [
+        {
+          "code": "invalid_value",
+          "values": [
+            "2.0"
+          ],
+          "path": [
+            "jsonrpc"
+          ],
+          "message": "Invalid input: expected \"2.0\""
+        },
+        {
+          "code": "invalid_union",
+          "errors": [
+            [
+              {
+                "expected": "string",
+                "code": "invalid_type",
+                "path": [],
+                "message": "Invalid input: expected string, received undefined"
+              }
+            ],
+            [
+              {
+                "expected": "number",
+                "code": "invalid_type",
+                "path": [],
+                "message": "Invalid input: expected number, received undefined"
+              }
+            ]
+          ],
+          "path": [
+            "id"
+          ],
+          "message": "Invalid input"
+        },
+        {
+          "expected": "string",
+          "code": "invalid_type",
+          "path": [
+            "method"
+          ],
+          "message": "Invalid input: expected string, received undefined"
+        },
+        {
+          "code": "unrecognized_keys",
+          "keys": [
+            "type"
+          ],
+          "path": [],
+          "message": "Unrecognized key: \"type\""
+        }
+      ],
+      [
+        {
+          "code": "invalid_value",
+          "values": [
+            "2.0"
+          ],
+          "path": [
+            "jsonrpc"
+          ],
+          "message": "Invalid input: expected \"2.0\""
+        },
+        {
+          "expected": "string",
+          "code": "invalid_type",
+          "path": [
+            "method"
+          ],
+          "message": "Invalid input: expected string, received undefined"
+        },
+        {
+          "code": "unrecognized_keys",
+          "keys": [
+            "type"
+          ],
+          "path": [],
+          "message": "Unrecognized key: \"type\""
+        }
+      ],
+      [
+        {
+          "code": "invalid_value",
+          "values": [
+            "2.0"
+          ],
+          "path": [
+            "jsonrpc"
+          ],
+          "message": "Invalid input: expected \"2.0\""
+        },
+        {
+          "code": "invalid_union",
+          "errors": [
+            [
+              {
+                "expected": "string",
+                "code": "invalid_type",
+                "path": [],
+                "message": "Invalid input: expected string, received undefined"
+              }
+            ],
+            [
+              {
+                "expected": "number",
+                "code": "invalid_type",
+                "path": [],
+                "message": "Invalid input: expected number, received undefined"
+              }
+            ]
+          ],
+          "path": [
+            "id"
+          ],
+          "message": "Invalid input"
+        },
+        {
+          "expected": "object",
+          "code": "invalid_type",
+          "path": [
+            "result"
+          ],
+          "message": "Invalid input: expected object, received undefined"
+        },
+        {
+          "code": "unrecognized_keys",
+          "keys": [
+            "type"
+          ],
+          "path": [],
+          "message": "Unrecognized key: \"type\""
+        }
+      ],
+      [
+        {
+          "code": "invalid_value",
+          "values": [
+            "2.0"
+          ],
+          "path": [
+            "jsonrpc"
+          ],
+          "message": "Invalid input: expected \"2.0\""
+        },
+        {
+          "expected": "object",
+          "code": "invalid_type",
+          "path": [
+            "error"
+          ],
+          "message": "Invalid input: expected object, received undefined"
+        },
+        {
+          "code": "unrecognized_keys",
+          "keys": [
+            "type"
+          ],
+          "path": [],
+          "message": "Unrecognized key: \"type\""
+        }
+      ]
+    ],
+    "path": [],
+    "message": "Invalid input"
+  }
+] {"isTrusted":true}
+2026-04-26T15:30:13.977+01:00 DEBUG 55844 --- [voice-assistant-chatbot] [nio-8081-exec-4] frontend                                 : [voice-app.html] Ignoring non-JSON-RPC message [
+  {
+    "code": "invalid_union",
+    "errors": [
+      [
+        {
+          "code": "invalid_value",
+          "values": [
+            "2.0"
+          ],
+          "path": [
+            "jsonrpc"
+          ],
+          "message": "Invalid input: expected \"2.0\""
+        },
+        {
+          "code": "invalid_union",
+          "errors": [
+            [
+              {
+                "expected": "string",
+                "code": "invalid_type",
+                "path": [],
+                "message": "Invalid input: expected string, received undefined"
+              }
+            ],
+            [
+              {
+                "expected": "number",
+                "code": "invalid_type",
+                "path": [],
+                "message": "Invalid input: expected number, received undefined"
+              }
+            ]
+          ],
+          "path": [
+            "id"
+          ],
+          "message": "Invalid input"
+        },
+        {
+          "expected": "string",
+          "code": "invalid_type",
+          "path": [
+            "method"
+          ],
+          "message": "Invalid input: expected string, received undefined"
+        },
+        {
+          "code": "unrecognized_keys",
+          "keys": [
+            "type",
+            "globals"
+          ],
+          "path": [],
+          "message": "Unrecognized keys: \"type\", \"globals\""
+        }
+      ],
+      [
+        {
+          "code": "invalid_value",
+          "values": [
+            "2.0"
+          ],
+          "path": [
+            "jsonrpc"
+          ],
+          "message": "Invalid input: expected \"2.0\""
+        },
+        {
+          "expected": "string",
+          "code": "invalid_type",
+          "path": [
+            "method"
+          ],
+          "message": "Invalid input: expected string, received undefined"
+        },
+        {
+          "code": "unrecognized_keys",
+          "keys": [
+            "type",
+            "globals"
+          ],
+          "path": [],
+          "message": "Unrecognized keys: \"type\", \"globals\""
+        }
+      ],
+      [
+        {
+          "code": "invalid_value",
+          "values": [
+            "2.0"
+          ],
+          "path": [
+            "jsonrpc"
+          ],
+          "message": "Invalid input: expected \"2.0\""
+        },
+        {
+          "code": "invalid_union",
+          "errors": [
+            [
+              {
+                "expected": "string",
+                "code": "invalid_type",
+                "path": [],
+                "message": "Invalid input: expected string, received undefined"
+              }
+            ],
+            [
+              {
+                "expected": "number",
+                "code": "invalid_type",
+                "path": [],
+                "message": "Invalid input: expected number, received undefined"
+              }
+            ]
+          ],
+          "path": [
+            "id"
+          ],
+          "message": "Invalid input"
+        },
+        {
+          "expected": "object",
+          "code": "invalid_type",
+          "path": [
+            "result"
+          ],
+          "message": "Invalid input: expected object, received undefined"
+        },
+        {
+          "code": "unrecognized_keys",
+          "keys": [
+            "type",
+            "globals"
+          ],
+          "path": [],
+          "message": "Unrecognized keys: \"type\", \"globals\""
+        }
+      ],
+      [
+        {
+          "code": "invalid_value",
+          "values": [
+            "2.0"
+          ],
+          "path": [
+            "jsonrpc"
+          ],
+          "message": "Invalid input: expected \"2.0\""
+        },
+        {
+          "expected": "object",
+          "code": "invalid_type",
+          "path": [
+            "error"
+          ],
+          "message": "Invalid input: expected object, received undefined"
+        },
+        {
+          "code": "unrecognized_keys",
+          "keys": [
+            "type",
+            "globals"
+          ],
+          "path": [],
+          "message": "Unrecognized keys: \"type\", \"globals\""
+        }
+      ]
+    ],
+    "path": [],
+    "message": "Invalid input"
+  }
+] {"isTrusted":true}
+2026-04-26T15:30:20.290+01:00 ERROR 55844 --- [voice-assistant-chatbot] [nio-8081-exec-6] frontend                                 : [voice-app.html] VAD init failed Permission denied by system
+2026-04-26T15:30:22.400+01:00 ERROR 55844 --- [voice-assistant-chatbot] [nio-8081-exec-5] frontend                                 : [voice-app.html] VAD init failed Permission denied by system
+2026-04-26T15:30:30.582+01:00 ERROR 55844 --- [voice-assistant-chatbot] [nio-8081-exec-3] frontend                                 : [voice-app.html] VAD init failed Permission denied by system
+2026-04-26T15:31:14.463+01:00 ERROR 55844 --- [voice-assistant-chatbot] [nio-8081-exec-7] frontend                                 : [voice-app.html] MCP Connection failed McpError: MCP error -32001: Request timed out
+    at Q.fromError (https://unpkg.com/@modelcontextprotocol/ext-apps@1.7.0/dist/src/app-with-deps.js:40:69678)
+    at q (https://unpkg.com/@modelcontextprotocol/ext-apps@1.7.0/dist/src/app-with-deps.js:40:81382)
+2026-04-26T15:31:14.463+01:00 DEBUG 55844 --- [voice-assistant-chatbot] [nio-8081-exec-8] frontend                                 : [voice-app.html] Sending message {"jsonrpc":"2.0","method":"notifications/cancelled","params":{"requestId":0,"reason":"McpError: MCP error -32001: Request timed out"}}

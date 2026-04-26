@@ -1,0 +1,57 @@
+import { Meta } from "@storybook/blocks";
+
+<Meta title="Tripilots Design System/02 Roadmap" />
+
+# Storybook implementation roadmap
+
+Esta pagina adapta el roadmap importado al estado real del repo.
+
+## Vision
+
+- Objetivo: un design system completo en Storybook para Tripilots.
+- Horizonte: 8 a 12 semanas.
+- Stack base: React, TypeScript, Tailwind CSS v4 y Storybook 8.
+
+## Fases
+
+| Fase | Foco | Resultado esperado |
+| --- | --- | --- |
+| 1 | Setup y foundations | Storybook, tokens, docs, baseline de calidad |
+| 2 | Atoms | Button, Input, Badge, Avatar, Typography y base interactiva |
+| 3 | Molecules | Card, Modal, Select, Toast, Tabs, Pagination y formularios |
+| 4 | Organisms | Navigation, ProposalList, DataTable, FormWizard y layout complexes |
+| 5 | Templates | Landing, dashboard, proposal flows y detail pages |
+| 6 | Testing y docs | play functions, a11y, Chromatic y coverage |
+| 7 | Polish | performance, despliegue, onboarding y QA final |
+
+## Estado actual del repo
+
+- Storybook ya existe y tiene una base de stories para guia visual y MCP.
+- Hay componentes reutilizables reales en `src/shared/components/ui`.
+- Faltaba convertir el roadmap de Tripilots en una referencia viva dentro del repo.
+- Faltaba separar tokens de Tripilots del tema actual del producto.
+
+## Lo que se considera done en Fase 1
+
+- Storybook con configuracion coherente de viewports, a11y y temas.
+- Tokens fuente de verdad en `src/tokens`.
+- Paginas de Storybook para overview, tokens y roadmap.
+- Un documento canon en el repo que sirva como referencia de implementacion.
+
+## Regla de cobertura
+
+La cobertura final no la cerramos contra una wishlist generica, sino contra el archivo de Figma.
+
+Por eso, cuando Figma MCP quede activo en la sesion, la siguiente capa de trabajo sera:
+
+1. inventariar componentes reales,
+2. mapear variantes y estados,
+3. cruzar lo ya existente en Storybook,
+4. abrir la matriz de gaps por fase.
+
+## Metricas de exito
+
+- 100 por ciento de componentes de Figma con al menos una historia.
+- 80 por ciento o mas de coverage donde aplique.
+- 0 errores de accesibilidad bloqueantes.
+- Storybook publico y usable para diseño y desarrollo.

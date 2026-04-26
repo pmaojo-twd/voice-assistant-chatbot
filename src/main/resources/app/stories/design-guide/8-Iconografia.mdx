@@ -1,0 +1,101 @@
+import { Meta } from "@storybook/blocks";
+import SearchIcon from "lucide-react/dist/esm/icons/search";
+import BellIcon from "lucide-react/dist/esm/icons/bell";
+import UserIcon from "lucide-react/dist/esm/icons/user-round";
+import SettingsIcon from "lucide-react/dist/esm/icons/cog";
+import HeartIcon from "lucide-react/dist/esm/icons/heart";
+import CheckIcon from "lucide-react/dist/esm/icons/check";
+import XIcon from "lucide-react/dist/esm/icons/x";
+import ChevronRightIcon from "lucide-react/dist/esm/icons/chevron-right";
+import PlaneIcon from "lucide-react/dist/esm/icons/plane";
+import MapPinIcon from "lucide-react/dist/esm/icons/map-pin";
+import CalendarIcon from "lucide-react/dist/esm/icons/calendar";
+import TrashIcon from "lucide-react/dist/esm/icons/trash-2";
+
+<Meta title="Guia de Diseno/09 Iconografia" />
+
+# Iconografía
+
+## Decisión: una sola librería — **Lucide**
+
+El UI Kit en Figma incluye dos sets de iconos en paralelo (Lucide y Heroicons),
+pero **el código del proyecto usa exclusivamente `lucide-react`** y los
+componentes shadcn-style del repo importan iconos así:
+
+```ts
+import CheckIcon from "lucide-react/dist/esm/icons/check";
+```
+
+Razones:
+
+1. **Consistencia con el código existente** (`button`, `select`, `dialog`, `carousel`, `sonner`, `checkbox` ya importan de Lucide).
+2. **Tree-shaking explícito** vía import directo `lucide-react/dist/esm/icons/*`.
+3. **Cobertura**: Lucide cubre todos los casos del UI Kit (navegación, comunicación, calendario, viaje, etc.).
+4. **Configuración shadcn**: `components.json` tiene `"iconLibrary": "lucide"`.
+
+> Si abres una PR con un icono de Heroicons, **conviértelo a su equivalente Lucide** antes de mergear.
+
+## Tamaños
+
+| Contexto | Clase | Tamaño |
+|---|---|---|
+| Inline en texto pequeño | `size-3` | 12px |
+| Inline en texto base | `size-4` | 16px (default en `Button`) |
+| Botón icon-sm | `size-4` | 16px |
+| Botón icon-lg / avatares | `size-5` | 20px |
+| Iconos hero / empty state | `size-12` | 48px |
+
+## Reglas
+
+- Usa `text-muted-foreground` para iconos decorativos.
+- Usa el color del texto (`currentColor`) para iconos que comunican estado.
+- En botones, no añadas clase de tamaño: el `Button` ya define `size-4` por default.
+- Acompaña siempre los iconos sin label con `aria-label` o un `<span className="sr-only">`.
+
+## Set base recomendado
+
+<div
+  style={{
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fill, minmax(120px, 1fr))",
+    gap: "16px",
+    padding: "24px 0",
+  }}
+>
+  {[
+    { Icon: SearchIcon, name: "search" },
+    { Icon: BellIcon, name: "bell" },
+    { Icon: UserIcon, name: "user-round" },
+    { Icon: SettingsIcon, name: "cog" },
+    { Icon: HeartIcon, name: "heart" },
+    { Icon: CheckIcon, name: "check" },
+    { Icon: XIcon, name: "x" },
+    { Icon: ChevronRightIcon, name: "chevron-right" },
+    { Icon: PlaneIcon, name: "plane" },
+    { Icon: MapPinIcon, name: "map-pin" },
+    { Icon: CalendarIcon, name: "calendar" },
+    { Icon: TrashIcon, name: "trash-2" },
+  ].map(({ Icon, name }) => (
+    <div
+      key={name}
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        gap: "8px",
+        padding: "12px",
+        border: "1px solid var(--border)",
+        borderRadius: "12px",
+      }}
+    >
+      <Icon size={24} />
+      <code style={{ fontSize: "11px" }}>{name}</code>
+    </div>
+  ))}
+</div>
+
+## Cómo añadir un icono nuevo
+
+1. Búscalo en [lucide.dev/icons](https://lucide.dev/icons).
+2. Importa con la ruta directa: `import FooIcon from "lucide-react/dist/esm/icons/foo";`.
+3. Si el icono no existe en Lucide, abre issue antes de añadir Heroicons como excepción.

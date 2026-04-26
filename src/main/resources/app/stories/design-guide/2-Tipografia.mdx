@@ -1,0 +1,40 @@
+import { Meta, Typeset } from "@storybook/blocks";
+
+<Meta title="Guia de Diseno/02 Tipografia y Escala" />
+
+# Tipografia real del proyecto
+
+La fuente activa es `Inter Variable` via `--font-sans` en `src/index.css`.
+
+<Typeset
+  fontFamily="var(--font-sans)"
+  fontSizes={[
+    "12px",
+    "14px",
+    "16px",
+    "18px",
+    "20px",
+    "24px",
+    "30px",
+    "36px",
+  ]}
+  fontWeight={400}
+  sampleText="Aa Bb Cc 123 - MCP Apps"
+/>
+
+## Escala recomendada para MCP Apps
+
+- Titulo de bloque inline: `text-sm` o `text-base`, peso `600`.
+- Texto principal en tarjeta: `text-sm` o `text-base`, interlineado comodo.
+- Microcopy de estado (timestamps, labels): `text-xs` con `text-muted-foreground`.
+- Evitar paredes de texto en chat: maximo 2 a 4 lineas por bloque.
+
+## Jerarquia por contexto
+
+1. Inline card: una sola accion principal y texto corto.
+2. Carousel: titulo breve + comparables visibles.
+3. Fullscreen: encabezado claro, secciones y escaneo rapido.
+
+## Regla practica
+
+Si el usuario necesita "leer para entender", reduce texto y aumenta estructura visual.

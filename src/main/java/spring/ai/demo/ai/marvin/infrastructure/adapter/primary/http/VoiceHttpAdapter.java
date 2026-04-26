@@ -17,6 +17,8 @@ import spring.ai.demo.ai.marvin.application.VoiceAssistantService;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -34,6 +36,15 @@ public class VoiceHttpAdapter {
     public String getVoiceApp() throws IOException {
         ClassPathResource resource = new ClassPathResource("app/voice-app.html");
         return StreamUtils.copyToString(resource.getInputStream(), StandardCharsets.UTF_8);
+    }
+
+    @GetMapping("/api/status")
+    public Map<String, Object> getStatus() {
+        return Map.of(
+            "status", "online",
+            "version", "2.0.0",
+            "capabilities", List.of("STT", "TTS", "VAD", "RAG")
+        );
     }
 
     @PostMapping(value = "/api/voice/process", consumes = MediaType.APPLICATION_JSON_VALUE,

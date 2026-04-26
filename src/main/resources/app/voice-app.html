@@ -3,405 +3,309 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Voice Assistant - MCP App</title>
+    <title>Marvin - Voice Assistant</title>
+    
+    <!-- Dependencies -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+
     <style>
         :root {
-            --primary: #6366f1;
-            --primary-glow: rgba(99, 102, 241, 0.4);
-            --bg: #0f172a;
+            --primary: #8b5cf6;
+            --primary-dark: #7c3aed;
+            --bg-dark: #0f172a;
             --card-bg: rgba(30, 41, 59, 0.7);
-            --text: #f8fafc;
-            --text-dim: #94a3b8;
         }
 
         body {
             font-family: 'Outfit', sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
+            background: radial-gradient(circle at top right, #1e1b4b, #0f172a);
+            color: #f1f5f9;
+            height: 100vh;
             margin: 0;
+            overflow: hidden;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
-            overflow: hidden;
         }
 
-        .container {
+        .glass-card {
             background: var(--card-bg);
             backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 24px;
-            padding: 40px;
-            text-align: center;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
-            max-width: 400px;
-            width: 90%;
-            transition: transform 0.3s ease;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         }
 
-        .visualizer {
-            height: 120px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 4px;
-            margin: 20px 0;
-        }
-
-        .bar {
-            width: 4px;
-            height: 10px;
-            background: var(--primary);
-            border-radius: 2px;
-            transition: height 0.1s ease;
-            box-shadow: 0 0 10px var(--primary-glow);
-        }
-
-        .status {
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-
-        .sub-status {
-            font-size: 0.9rem;
-            color: var(--text-dim);
-            margin-bottom: 24px;
-        }
-
-        .mic-button {
+        .mic-btn {
             width: 80px;
             height: 80px;
             border-radius: 50%;
             background: var(--primary);
-            border: none;
-            color: white;
-            font-size: 2rem;
-            cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.3s ease;
-            box-shadow: 0 0 20px var(--primary-glow);
-            margin: 0 auto;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.7);
         }
 
-        .mic-button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 30px var(--primary-glow);
+        .mic-btn:hover {
+            transform: scale(1.1);
+            background: var(--primary-dark);
         }
 
-        .mic-button.active {
-            background: #ef4444;
-            box-shadow: 0 0 30px rgba(239, 68, 68, 0.4);
+        .mic-btn.active {
             animation: pulse 1.5s infinite;
+            background: #ef4444;
         }
 
         @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+            70% { transform: scale(1.05); box-shadow: 0 0 0 20px rgba(239, 68, 68, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
         }
 
-        .initial-query {
-            margin-top: 24px;
-            padding: 16px;
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 12px;
-            font-style: italic;
-            color: var(--text-dim);
-            font-size: 0.9rem;
-            text-align: left;
+        .visualizer-container {
+            height: 100px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
 
-        .transcript {
-            margin-top: 16px;
-            font-size: 0.9rem;
-            min-height: 1.2rem;
+        .bar {
+            width: 4px;
+            background: var(--primary);
+            border-radius: 2px;
+            transition: height 0.1s ease;
         }
 
-        /* SVG Icons */
-        .icon { width: 32px; height: 32px; fill: currentColor; }
+        .status-badge {
+            background: rgba(139, 92, 246, 0.2);
+            color: #c4b5fd;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+        }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <div class="status" id="status">Voice Assistant</div>
-        <div class="sub-status" id="sub-status">Initializing...</div>
+    <div class="glass-card p-8 w-full max-w-md flex flex-col items-center gap-6">
+        <h1 class="text-2xl font-semibold bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
+            Marvin Assistant
+        </h1>
 
-        <div class="visualizer" id="visualizer">
-            <!-- Bars will be generated by JS -->
+        <div id="status-container" class="flex flex-col items-center gap-2">
+            <span id="status" class="text-lg font-medium">Desconectado</span>
+            <span id="sub-status" class="text-sm text-gray-400">Pulsa el micro para empezar</span>
         </div>
 
-        <button class="mic-button" id="mic-btn">
-            <svg class="icon" viewBox="0 0 24 24">
-                <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>
-                <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
+        <div class="visualizer-container" id="visualizer">
+            <!-- Bars will be added by JS -->
+        </div>
+
+        <button id="mic-btn" class="mic-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
             </svg>
         </button>
 
-        <div class="transcript" id="transcript"></div>
+        <div id="history" class="w-full mt-4 max-h-32 overflow-y-auto text-sm text-gray-300 space-y-2">
+            <!-- Previous interactions -->
+        </div>
 
-        <div class="initial-query" id="initial-query-container" style="display: none;">
-            <strong>Contexto:</strong> <span id="initial-query"></span>
+        <div class="flex gap-2">
+            <span class="status-badge">Backend: Java</span>
+            <span class="status-badge">VAD: Server-side</span>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web@1.14.0/dist/ort.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@ricky0123/vad-web@0.0.22/dist/bundle.min.js"></script>
-    <script type="module">
-        import { App } from "https://unpkg.com/@modelcontextprotocol/ext-apps@1.7.0/app-with-deps";
+    <script>
+        // Log Forwarder
+        function installLogForwarder(backendUrl) {
+            const originalLog = console.log;
+            const originalError = console.error;
+            const originalDebug = console.debug;
 
-        const app = new App({
-            name: "voice-assistant-ui",
-            version: "1.0.0"
-        });
+            const sendLog = (level, args) => {
+                const msg = args.map(arg => typeof arg === 'object' ? JSON.stringify(arg) : arg).join(' ');
+                fetch(`${backendUrl}/api/logs`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ level, message: `[voice-app.html] ${msg}` })
+                }).catch(() => {});
+            };
+
+            console.log = (...args) => { originalLog(...args); sendLog('INFO', args); };
+            console.error = (...args) => { originalError(...args); sendLog('ERROR', args); };
+            console.debug = (...args) => { originalDebug(...args); sendLog('DEBUG', args); };
+        }
 
         const params = new URLSearchParams(window.location.search);
-        const PUBLIC_BACKEND = 'https://marvin.pelayomaojo.es';
-        const isHttpOrigin = window.location.protocol === 'http:' || window.location.protocol === 'https:';
-        const sameOriginCandidate = isHttpOrigin ? window.location.origin : null;
-        const backendBaseUrl = params.get('backend')
-            || (sameOriginCandidate && /marvin\.pelayomaojo\.es|localhost/.test(sameOriginCandidate) ? sameOriginCandidate : PUBLIC_BACKEND);
+        const PUBLIC_BACKEND = "https://marvin.pelayomaojo.es";
+        const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        const defaultLocal = `http://${window.location.hostname}:8081`;
+        
+        const backendBaseUrl = params.get('backend') || (isLocalhost ? defaultLocal : PUBLIC_BACKEND);
+        
+        installLogForwarder(backendBaseUrl);
 
-        // --- Reenvío de logs del navegador al backend (centralizador) ---
-        (function installLogForwarder() {
-            const levels = ['log', 'info', 'warn', 'error', 'debug'];
-            const original = {};
-            const send = (level, args) => {
-                try {
-                    const message = args.map(a => {
-                        if (a instanceof Error) return a.stack || a.message;
-                        if (typeof a === 'object') { try { return JSON.stringify(a); } catch { return String(a); } }
-                        return String(a);
-                    }).join(' ');
-                    fetch(backendBaseUrl + '/api/logs', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ level: level === 'log' ? 'info' : level, message, source: 'voice-app.html' }),
-                        keepalive: true
-                    }).catch(() => {});
-                } catch {}
-            };
-            levels.forEach(lvl => {
-                original[lvl] = console[lvl].bind(console);
-                console[lvl] = (...args) => { send(lvl, args); original[lvl](...args); };
-            });
-            window.addEventListener('error', e => send('error', [e.message, e.filename + ':' + e.lineno]));
-            window.addEventListener('unhandledrejection', e => send('error', ['unhandledrejection', e.reason]));
-        })();
-
-        let vadInstance = null;
-        let isListening = false;
-        let isBusy = false;
-
+        const wsUrl = backendBaseUrl.replace('http', 'ws') + '/ws/voice';
+        
         const micBtn = document.getElementById('mic-btn');
         const statusEl = document.getElementById('status');
         const subStatusEl = document.getElementById('sub-status');
         const visualizer = document.getElementById('visualizer');
-        const transcriptEl = document.getElementById('transcript');
-        const initialQueryEl = document.getElementById('initial-query');
-        const initialQueryContainer = document.getElementById('initial-query-container');
+        const historyEl = document.getElementById('history');
 
-        // Create visualizer bars
+        let socket = null;
+        let audioContext = null;
+        let scriptProcessor = null;
+        let isStreaming = false;
+        let isBusy = false;
+
+        // Init Visualizer Bars
         for (let i = 0; i < 20; i++) {
             const bar = document.createElement('div');
             bar.className = 'bar';
+            bar.style.height = '10px';
             visualizer.appendChild(bar);
         }
 
-        const bars = document.querySelectorAll('.bar');
-
-        app.ontoolinput = (input) => {
-            const query = input?.arguments?.initialQuery;
-            if (query) {
-                initialQueryEl.textContent = query;
-                initialQueryContainer.style.display = 'block';
+        function updateVisualizer(dataArray) {
+            const bars = visualizer.querySelectorAll('.bar');
+            const step = Math.floor(dataArray.length / bars.length);
+            for (let i = 0; i < bars.length; i++) {
+                const val = dataArray[i * step] / 128.0;
+                const height = Math.max(10, val * 60);
+                bars[i].style.height = `${height}px`;
             }
-        };
+        }
 
-        app.connect().then(async () => {
-            subStatusEl.textContent = "Ready";
-        }).catch(err => {
-            console.error("MCP Connection failed", err);
-            subStatusEl.textContent = "Ready for local demo";
-        });
+        async function initAudio() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                audioContext = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 16000 });
+                const source = audioContext.createMediaStreamSource(stream);
+                const analyzer = audioContext.createAnalyser();
+                analyzer.fftSize = 64;
+                source.connect(analyzer);
 
-        micBtn.addEventListener('click', toggleListening);
+                // Use ScriptProcessor for easy PCM extraction and resampling (16kHz)
+                scriptProcessor = audioContext.createScriptProcessor(4096, 1, 1);
+                source.connect(scriptProcessor);
+                scriptProcessor.connect(audioContext.destination);
 
-        async function toggleListening() {
-            if (isListening) {
-                stopListening();
+                scriptProcessor.onaudioprocess = (e) => {
+                    if (!isStreaming || isBusy) return;
+                    
+                    const inputData = e.inputBuffer.getChannelData(0);
+                    // Convert Float32 to Int16
+                    const pcmData = new Int16Array(inputData.length);
+                    for (let i = 0; i < inputData.length; i++) {
+                        pcmData[i] = Math.max(-1, Math.min(1, inputData[i])) * 0x7FFF;
+                    }
+
+                    if (socket && socket.readyState === WebSocket.OPEN) {
+                        socket.send(pcmData.buffer);
+                    }
+
+                    const dataArray = new Uint8Array(analyzer.frequencyBinCount);
+                    analyzer.getByteFrequencyData(dataArray);
+                    updateVisualizer(dataArray);
+                };
+
+                return true;
+            } catch (err) {
+                console.error("Audio init failed:", err);
+                statusEl.textContent = "Error de Micro";
+                subStatusEl.textContent = err.message;
+                return false;
+            }
+        }
+
+        function connect() {
+            statusEl.textContent = "Conectando...";
+            socket = new WebSocket(wsUrl);
+
+            socket.onopen = () => {
+                statusEl.textContent = "Conectado";
+                subStatusEl.textContent = "Pulsa el micro para hablar";
+                console.log("WebSocket connected");
+            };
+
+            socket.onmessage = async (event) => {
+                const response = JSON.parse(event.data);
+                if (response.status === 'success') {
+                    console.log("Response received:", response.text);
+                    addHistory(response.text);
+                    isBusy = true;
+                    statusEl.textContent = "Respondiendo…";
+                    subStatusEl.textContent = response.text;
+                    await playResponse(response.audio);
+                    isBusy = false;
+                    statusEl.textContent = "Escuchando…";
+                    subStatusEl.textContent = "Listo";
+                } else {
+                    console.error("Server error:", response.message);
+                }
+            };
+
+            socket.onclose = () => {
+                statusEl.textContent = "Desconectado";
+                micBtn.classList.remove('active');
+                isStreaming = false;
+                setTimeout(connect, 3000); // Reconnect
+            };
+        }
+
+        async function toggleStreaming() {
+            if (isStreaming) {
+                isStreaming = false;
+                micBtn.classList.remove('active');
+                statusEl.textContent = "Conectado";
+                subStatusEl.textContent = "Pausado";
             } else {
-                await startListening();
-            }
-        }
-
-        async function startListening() {
-            try {
-                if (!vadInstance) {
-                    statusEl.textContent = "Loading…";
-                    subStatusEl.textContent = "Initializing voice detector";
-                    const cdn = "https://cdn.jsdelivr.net/npm/@ricky0123/vad-web@0.0.22/dist/";
-                    vadInstance = await vad.MicVAD.new({
-                        baseAssetPath: cdn,
-                        onnxWASMBasePath: "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.14.0/dist/",
-                        positiveSpeechThreshold: 0.7,
-                        negativeSpeechThreshold: 0.5,
-                        minSpeechFrames: 4,
-                        redemptionFrames: 12,
-                        onSpeechStart: () => {
-                            if (isBusy) return;
-                            statusEl.textContent = "Listening…";
-                            subStatusEl.textContent = "Speech detected";
-                        },
-                        onSpeechEnd: async (audio) => {
-                            if (isBusy) return;
-                            isBusy = true;
-                            try {
-                                statusEl.textContent = "Processing…";
-                                subStatusEl.textContent = "Sending to backend";
-                                await sendUtterance(audio);
-                            } finally {
-                                isBusy = false;
-                                if (isListening) {
-                                    statusEl.textContent = "Listening…";
-                                    subStatusEl.textContent = "Channel open";
-                                }
-                            }
-                        },
-                        onVADMisfire: () => {
-                            if (isListening && !isBusy) {
-                                subStatusEl.textContent = "Channel open";
-                            }
-                        }
-                    });
+                if (!audioContext) {
+                    const success = await initAudio();
+                    if (!success) return;
                 }
-                vadInstance.start();
-                isListening = true;
+                if (audioContext.state === 'suspended') {
+                    await audioContext.resume();
+                }
+                isStreaming = true;
                 micBtn.classList.add('active');
-                statusEl.textContent = "Listening…";
-                subStatusEl.textContent = "Channel open";
-            } catch (err) {
-                console.error("VAD init failed", err);
-                statusEl.textContent = "Error";
-                subStatusEl.textContent = "Microphone or VAD failed";
+                statusEl.textContent = "Escuchando…";
+                subStatusEl.textContent = "VAD en el servidor activo";
             }
         }
 
-        function stopListening() {
-            if (vadInstance) vadInstance.pause();
-            isListening = false;
-            micBtn.classList.remove('active');
-            statusEl.textContent = "Idle";
-            subStatusEl.textContent = "Channel closed";
-        }
-
-        async function sendUtterance(float32Pcm16k) {
-            const wavBlob = encodeWav(float32Pcm16k, 16000);
-            const base64Audio = await blobToBase64(wavBlob);
-            try {
-                const response = await fetch(`${backendBaseUrl}/api/voice/process`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ audio: base64Audio, mimeType: 'audio/wav' })
-                });
-                if (!response.ok) throw new Error(`Backend returned ${response.status}`);
-                const result = await response.json();
-                transcriptEl.textContent = result.text || '';
-                playAssistantAudio(result.audio, result.audioMimeType || 'audio/wav');
-            } catch (err) {
-                console.error("Voice processing failed", err);
-                subStatusEl.textContent = "Backend error: " + err.message;
-            }
-        }
-
-        function blobToBase64(blob) {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onloadend = () => resolve(String(reader.result).split(',')[1]);
-                reader.onerror = reject;
-                reader.readAsDataURL(blob);
+        async function playResponse(base64Audio) {
+            return new Promise((resolve) => {
+                const audioData = Uint8Array.from(atob(base64Audio), c => c.charCodeAt(0));
+                const blob = new Blob([audioData], { type: 'audio/wav' });
+                const url = URL.createObjectURL(blob);
+                const audio = new Audio(url);
+                audio.onended = resolve;
+                audio.play();
             });
         }
 
-        function encodeWav(samples, sampleRate) {
-            const buffer = new ArrayBuffer(44 + samples.length * 2);
-            const view = new DataView(buffer);
-            const writeStr = (off, s) => { for (let i = 0; i < s.length; i++) view.setUint8(off + i, s.charCodeAt(i)); };
-            writeStr(0, 'RIFF');
-            view.setUint32(4, 36 + samples.length * 2, true);
-            writeStr(8, 'WAVE');
-            writeStr(12, 'fmt ');
-            view.setUint32(16, 16, true);
-            view.setUint16(20, 1, true);
-            view.setUint16(22, 1, true);
-            view.setUint32(24, sampleRate, true);
-            view.setUint32(28, sampleRate * 2, true);
-            view.setUint16(32, 2, true);
-            view.setUint16(34, 16, true);
-            writeStr(36, 'data');
-            view.setUint32(40, samples.length * 2, true);
-            let offset = 44;
-            for (let i = 0; i < samples.length; i++, offset += 2) {
-                const s = Math.max(-1, Math.min(1, samples[i]));
-                view.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7fff, true);
-            }
-            return new Blob([view], { type: 'audio/wav' });
+        function addHistory(text) {
+            const entry = document.createElement('div');
+            entry.textContent = `> ${text}`;
+            historyEl.prepend(entry);
         }
 
-        function playAssistantAudio(base64Audio, mimeType) {
-            if (!base64Audio) {
-                return;
-            }
+        micBtn.addEventListener('click', toggleStreaming);
 
-            const audio = new Audio(`data:${mimeType};base64,${base64Audio}`);
-            audio.play().catch(err => {
-                console.warn("Audio playback failed", err);
-            });
-        }
+        // Auto-connect on load
+        connect();
 
-        function preferredRecordingMimeType() {
-            const candidates = [
-                'audio/webm;codecs=opus',
-                'audio/webm',
-                'audio/ogg;codecs=opus',
-                'audio/mp4'
-            ];
-
-            return candidates.find(type => MediaRecorder.isTypeSupported(type)) || '';
-        }
-
-        let audioContext, analyser, dataArray, animationId;
-
-        function startVisualizer(stream) {
-            audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            analyser = audioContext.createAnalyser();
-            const source = audioContext.createMediaStreamSource(stream);
-            source.connect(analyser);
-            analyser.fftSize = 64;
-            const bufferLength = analyser.frequencyBinCount;
-            dataArray = new Uint8Array(bufferLength);
-
-            function update() {
-                analyser.getByteFrequencyData(dataArray);
-                for (let i = 0; i < bars.length; i++) {
-                    const value = dataArray[i] / 2;
-                    bars[i].style.height = Math.max(10, value) + 'px';
-                }
-                animationId = requestAnimationFrame(update);
-            }
-            update();
-        }
-
-        function stopVisualizer() {
-            cancelAnimationFrame(animationId);
-            bars.forEach(bar => bar.style.height = '10px');
-            if (audioContext) audioContext.close();
-        }
     </script>
+
 </body>
 </html>

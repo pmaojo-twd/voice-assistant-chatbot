@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/",
+      "destination": "/mcp-app.html"
+    },
+    {
+      "source": "/mcp",
+      "destination": "/api/index"
+    }
+  ]
+}

@@ -1,0 +1,100 @@
+import { Meta, ColorPalette, ColorItem } from "@storybook/blocks";
+
+<Meta title="Guia de Diseno/01 Colores y Tokens" />
+
+# Sistema de color real (OKLCH)
+
+Los tokens de este proyecto estan definidos en `src/index.css` usando valores `oklch(...)`.  
+En Storybook deben usarse con `var(--token)` para reflejar exactamente el tema actual.
+
+## Tokens base de superficie
+
+<ColorPalette>
+  <ColorItem
+    title="Background"
+    subtitle="--background"
+    colors={{ Base: "var(--background)" }}
+  />
+  <ColorItem
+    title="Foreground"
+    subtitle="--foreground"
+    colors={{ Texto: "var(--foreground)" }}
+  />
+  <ColorItem title="Card" subtitle="--card" colors={{ Base: "var(--card)" }} />
+  <ColorItem
+    title="Card foreground"
+    subtitle="--card-foreground"
+    colors={{ Texto: "var(--card-foreground)" }}
+  />
+  <ColorItem
+    title="Popover"
+    subtitle="--popover"
+    colors={{ Base: "var(--popover)" }}
+  />
+  <ColorItem
+    title="Popover foreground"
+    subtitle="--popover-foreground"
+    colors={{ Texto: "var(--popover-foreground)" }}
+  />
+</ColorPalette>
+
+## Tokens semanticos de accion
+
+<ColorPalette>
+  <ColorItem
+    title="Primary"
+    subtitle="--primary / --primary-foreground"
+    colors={{
+      Base: "var(--primary)",
+      Texto: "var(--primary-foreground)",
+    }}
+  />
+  <ColorItem
+    title="Secondary"
+    subtitle="--secondary / --secondary-foreground"
+    colors={{
+      Base: "var(--secondary)",
+      Texto: "var(--secondary-foreground)",
+    }}
+  />
+  <ColorItem
+    title="Accent"
+    subtitle="--accent / --accent-foreground"
+    colors={{
+      Base: "var(--accent)",
+      Texto: "var(--accent-foreground)",
+    }}
+  />
+  <ColorItem
+    title="Muted"
+    subtitle="--muted / --muted-foreground"
+    colors={{
+      Base: "var(--muted)",
+      Texto: "var(--muted-foreground)",
+    }}
+  />
+  <ColorItem
+    title="Destructive"
+    subtitle="--destructive"
+    colors={{ Base: "var(--destructive)" }}
+  />
+</ColorPalette>
+
+## Tokens de estructura y foco
+
+<ColorPalette>
+  <ColorItem
+    title="Border"
+    subtitle="--border"
+    colors={{ Base: "var(--border)" }}
+  />
+  <ColorItem title="Input" subtitle="--input" colors={{ Base: "var(--input)" }} />
+  <ColorItem title="Ring" subtitle="--ring" colors={{ Base: "var(--ring)" }} />
+</ColorPalette>
+
+## Reglas de uso
+
+- Usa tokens semanticos, no valores hardcoded (`#fff`, `#111`), para que claro/oscuro funcione automaticamente.
+- `primary` solo para accion principal.
+- `muted` para informacion secundaria, nunca para CTA.
+- `ring` siempre visible en foco de teclado.

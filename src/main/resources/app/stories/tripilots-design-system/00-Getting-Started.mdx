@@ -1,0 +1,38 @@
+import { Meta } from "@storybook/blocks";
+
+<Meta title="Tripilots Design System/00 Getting Started" />
+
+# Tripilots Storybook foundation
+
+Esta seccion convierte el roadmap de Tripilots en una base real dentro del repo.
+
+## Canon obligatorio
+
+- El roadmap de implementacion de Storybook para Tripilots.
+- Los requirements del UI kit de Tripilots.
+- El archivo de Figma de Tripilots como inventario final de componentes.
+
+## Que queda ya aterrizado en este repo
+
+- Configuracion base de Storybook alineada con viewports, a11y, controles y tema global.
+- Tokens fuente de verdad en `src/tokens`.
+- Documentacion troncal dentro del propio Storybook para overview, tokens y roadmap.
+
+## Como vamos a trabajar
+
+1. Fase 1: estabilizar foundations y documentacion.
+2. Fase 2: auditar el archivo de Figma y sacar matriz de cobertura real.
+3. Fase 3: cerrar gaps entre Figma, stories existentes y componentes reales.
+
+## Regla de calidad
+
+No daremos por "completo" un componente solo porque exista una story.
+
+Cada componente de Tripilots debe quedar cubierto por:
+
+- historia base,
+- variantes,
+- estados,
+- viewport,
+- notas de accesibilidad,
+- y referencia clara al patron de Figma cuando aplique.

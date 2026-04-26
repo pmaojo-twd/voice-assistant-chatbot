@@ -1,0 +1,51 @@
+import { Meta } from "@storybook/blocks";
+
+<Meta title="Guia de Diseno/04 Layout y Radios" />
+
+# Tokens de estructura
+
+## Radios reales del sistema
+
+Los radios dependen de `--radius` en `src/index.css`.
+
+- `--radius-sm`: `calc(var(--radius) - 4px)`
+- `--radius-md`: `calc(var(--radius) - 2px)`
+- `--radius-lg`: `var(--radius)`
+- `--radius-xl`: `calc(var(--radius) + 4px)`
+- `--radius-2xl`: `calc(var(--radius) * 1.8)`
+
+## Regla de consistencia
+
+- Inputs y botones: `rounded-md`
+- Tarjetas inline: `rounded-xl` o `rounded-2xl`
+- Superficies fullscreen: `rounded-2xl` en paneles internos
+
+## Densidad para chat
+
+- Espaciado vertical entre bloques: `8px` a `16px`
+- Padding interno de card inline: `12px` a `16px`
+- Distancia minima entre CTA y texto: `8px`
+
+## Ejemplo visual
+
+<div style={{ display: "grid", gap: "12px", maxWidth: "520px" }}>
+  <div
+    style={{
+      border: "1px solid var(--border)",
+      borderRadius: "calc(var(--radius) - 2px)",
+      padding: "10px 12px",
+    }}
+  >
+    Control compacto (`rounded-md`)
+  </div>
+  <div
+    style={{
+      border: "1px solid var(--border)",
+      borderRadius: "calc(var(--radius) + 4px)",
+      padding: "14px 16px",
+      background: "var(--card)",
+    }}
+  >
+    Tarjeta de accion (`rounded-xl`)
+  </div>
+</div>

@@ -1,0 +1,37 @@
+import { Meta } from "@storybook/blocks";
+
+<Meta title="Guia de Diseno/00 Introduccion" />
+
+# Guia de diseno para MCP Apps
+
+Esta guia documenta el sistema visual real del proyecto y como aplicarlo a experiencias conversacionales con MCP.
+
+## Que incluye
+
+- Tokens reales leidos desde `src/index.css`.
+- Reglas de uso para UI en chat (inline, fullscreen y flujos guiados).
+- Ejemplos de composicion para que diseno y desarrollo compartan el mismo criterio.
+
+## Checklist de calidad
+
+- Los componentes deben usar tokens semanticos (`bg-card`, `text-foreground`, `border-border`).
+- Los estados de feedback deben ser visibles y breves.
+- La accion principal debe ser clara en menos de 3 segundos.
+- No se debe portar un dashboard completo dentro del chat: se priorizan tareas atomicas.
+
+## Navegacion recomendada
+
+1. `01 Colores y Tokens`
+2. `02 Tipografia y Escala`
+3. `03 Principios MCP Apps`
+4. `Composiciones` y libreria de componentes
+
+## Tripilots como fuente troncal
+
+Para el trabajo del design system de Tripilots, la referencia obligatoria pasa a ser:
+
+- La seccion `Tripilots Design System` dentro de este Storybook.
+- El roadmap base importado al repo desde `STORYBOOK_ROADMAP_1.md`.
+- El archivo de Figma de Tripilots, que marcara el inventario final de componentes y variantes.
+
+La guia de MCP Apps sigue siendo valida como base tecnica del proyecto, pero la taxonomia, cobertura y prioridades del UI kit se gobernaran desde Tripilots.

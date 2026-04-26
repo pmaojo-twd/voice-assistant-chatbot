@@ -1,6 +1,8 @@
 package spring.ai.demo.ai.marvin.infrastructure.adapter.primary.mcp;
 
 import io.modelcontextprotocol.spec.McpSchema;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.ai.mcp.annotation.McpResource;
 import org.springframework.ai.mcp.annotation.McpTool;
 import org.springframework.ai.mcp.annotation.context.MetaProvider;
@@ -19,6 +21,8 @@ import java.util.Map;
 
 @Component
 public class VoiceMcpAdapter {
+
+    private static final Logger log = LoggerFactory.getLogger(VoiceMcpAdapter.class);
 
     private static final String UI_URI = "ui://voice-app";
     private static final String UI_MIME = "text/html;profile=mcp-app";
@@ -63,6 +67,20 @@ public class VoiceMcpAdapter {
         );
     }
 
+    @McpTool(description = "Ingests logs from the UI")
+    public void ingestLogs(String level, String message, String source) {
+        String lvl = level == null ? "INFO" : level.toUpperCase();
+        String msg = message == null ? "" : message;
+        String src = source == null ? "browser" : source;
+        String line = "[" + src + "] " + msg;
+        switch (lvl) {
+            case "ERROR" -> log.error(line);
+            case "WARN" -> log.warn(line);
+            case "DEBUG" -> log.debug(line);
+            default -> log.info(line);
+        }
+    }
+
     public static final class VoiceUiToolMetaProvider implements MetaProvider {
         @Override
         public Map<String, Object> getMeta() {
@@ -70,10 +88,9 @@ public class VoiceMcpAdapter {
                     "ui/resourceUri", UI_URI,
                     "ui", Map.of(
                             "resourceUri", UI_URI,
-                            "preferredFrameSize", List.of("420px", "640px")
-                    ),
-                    "openai/outputTemplate", UI_URI,
-                    "securitySchemes", List.of(Map.of("type", "noauth"))
+                            "preferredFrameSize", List.of("420px", "640px"),
+                            "permissions", Map.of("microphone", Map.of())
+                    )
             );
         }
     }
@@ -89,14 +106,31 @@ public class VoiceMcpAdapter {
         return Map.of(
                 "ui", Map.of(
                         "prefersBorder", true,
+                        "permissions", Map.of(
+                                "microphone", Map.of(),
+                                "audio", Map.of()
+                        ),
+                        "required", List.of("microphone"),
+                        "features", List.of("microphone", "audio"),
                         "csp", Map.of(
-                                "connectDomains", List.of("https://marvin.pelayomaojo.es"),
+                                "connectDomains", List.of(
+                                        "https://marvin.pelayomaojo.es",
+                                        "wss://marvin.pelayomaojo.es",
+                                        "https://app.mcpjam.com",
+                                        "http://localhost:8081",
+                                        "ws://localhost:8081",
+                                        "https://cdn.jsdelivr.net",
+                                        "https://unpkg.com"
+                                ),
+                                "media-src", List.of("'self'", "blob:", "https://marvin.pelayomaojo.es"),
                                 "resourceDomains", List.of(
                                         "https://cdn.jsdelivr.net",
                                         "https://unpkg.com",
                                         "https://fonts.googleapis.com",
                                         "https://fonts.gstatic.com"
                                 ),
+                                "script-src", List.of("'self'", "'unsafe-eval'", "'wasm-unsafe-eval'", "https://cdn.jsdelivr.net", "https://unpkg.com"),
+                                "worker-src", List.of("'self'", "blob:", "https://cdn.jsdelivr.net", "https://unpkg.com"),
                                 "frameDomains", List.<String>of()
                         )
                 )
@@ -105,8 +139,16 @@ public class VoiceMcpAdapter {
 
     private String loadUiHtml() {
         try {
-            ClassPathResource resource = new ClassPathResource("app/voice-app.html");
-            return StreamUtils.copyToString(resource.getInputStream(), StandardCharsets.UTF_8);
+            // First try to load the built Vite app
+            ClassPathResource builtResource = new ClassPathResource("app/dist/mcp-app.html");
+            if (builtResource.exists()) {
+                log.info("Serving built Vite UI from app/dist/mcp-app.html");
+                return StreamUtils.copyToString(builtResource.getInputStream(), StandardCharsets.UTF_8);
+            }
+            // Fallback to legacy HTML if build hasn't run yet
+            log.warn("Built UI not found. Falling back to legacy app/voice-app.html");
+            ClassPathResource legacyResource = new ClassPathResource("app/voice-app.html");
+            return StreamUtils.copyToString(legacyResource.getInputStream(), StandardCharsets.UTF_8);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }

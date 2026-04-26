@@ -1,0 +1,78 @@
+{
+  "app": {
+    "connecting": "Connecting...",
+    "error": "Error:",
+    "noToolContext": "No tool context was provided yet. Waiting for the host to open a tool.",
+    "toolNotFound": "Tool UI for \"{{toolName}}\" was not found.",
+    "logs": {
+      "error": "App error"
+    }
+  },
+  "helloWorld": {
+    "badge": "Starter",
+    "title": "Hello World",
+    "description": "A single example tool that shows the full MCP flow without turning the repository into a multi-demo showcase.",
+    "summary": {
+      "singleTool": "One tool is easier to understand, easier to fork, and easier to replace with your real feature.",
+      "shadcn": "The UI still uses shadcn-style building blocks, so the starter keeps the design system you want.",
+      "microManifest": "The micro-manifest architecture stays in place, so adding a second tool later is still a local change."
+    },
+    "server": {
+      "title": "Server roundtrip",
+      "description": "Run the only tool in the starter and validate its payload in the UI before rendering anything.",
+      "inputLabel": "Name",
+      "inputPlaceholder": "Type a name",
+      "run": "Run tool",
+      "running": "Running...",
+      "hint": "The server validates input with Zod and returns neutral JSON so the UI can localize the final wording.",
+      "errorTitle": "Tool call failed",
+      "error": "The tool execution failed. Check the host logs or the server response.",
+      "invalidResponseTitle": "Unexpected payload",
+      "invalidResponse": "The tool returned a shape the UI does not understand yet. Adjust the shared contract before adding more UI."
+    },
+    "result": {
+      "title": "Latest result",
+      "empty": "Invoke the tool to inspect the starter payload.",
+      "greeting": "Hello, {{name}}!",
+      "requestedName": "Requested name",
+      "generatedAt": "Generated at",
+      "serverTimeZone": "Server time zone"
+    },
+    "host": {
+      "title": "Host actions",
+      "description": "These actions keep the starter practical without splitting the example into multiple demo tools.",
+      "message": "Send message",
+      "log": "Send log",
+      "docs": "Open MCP docs",
+      "footer": "Keep or remove these buttons depending on how much host integration your real app needs.",
+      "appMissing": "The host bridge is not ready yet.",
+      "messageSuccess": "Message sent to the host.",
+      "logSuccess": "Log sent to the host.",
+      "docsSuccess": "Requested the host to open the MCP docs.",
+      "actionError": "{{action}} failed: {{message}}",
+      "messageBody": "The hello-world starter is ready for {{name}}."
+    },
+    "context": {
+      "title": "Current host context",
+      "description": "Useful when a teammate wants to understand which values the host injects into the app.",
+      "tool": "Tool slug",
+      "locale": "Locale",
+      "timeZone": "Time zone",
+      "theme": "Theme",
+      "displayMode": "Display mode",
+      "platform": "Platform",
+      "unknown": "Not provided"
+    },
+    "nextSteps": {
+      "title": "Where to customize first",
+      "description": "These are the first files to touch when you turn this starter into a real product.",
+      "view": "Replace the sample layout in",
+      "manifest": "Rename the tool metadata in",
+      "server": "Change the server contract in",
+      "registry": "Register or duplicate tools in"
+    }
+  },
+  "tools": {
+    "voiceAssistant": "Voice Assistant"
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "app": {
+    "connecting": "Conectando...",
+    "error": "Error:",
+    "noToolContext": "Todavia no se ha proporcionado contexto de herramienta. Esperando a que el host abra una tool.",
+    "toolNotFound": "No se encontro la UI para la herramienta \"{{toolName}}\".",
+    "logs": {
+      "error": "Error de la app"
+    }
+  },
+  "helloWorld": {
+    "badge": "Starter",
+    "title": "Hello World",
+    "description": "Una unica tool de ejemplo que ensena el flujo MCP completo sin convertir el repositorio en una coleccion de demos.",
+    "summary": {
+      "singleTool": "Una sola tool es mas facil de entender, de clonar y de reemplazar por la funcionalidad real del equipo.",
+      "shadcn": "La UI sigue usando bloques de estilo shadcn, asi que el starter conserva el sistema visual que quieres mantener.",
+      "microManifest": "La arquitectura micro-manifest sigue intacta, asi que anadir una segunda tool mas adelante sigue siendo un cambio local."
+    },
+    "server": {
+      "title": "Roundtrip con el servidor",
+      "description": "Ejecuta la unica tool del starter y valida su payload en la UI antes de renderizar nada.",
+      "inputLabel": "Nombre",
+      "inputPlaceholder": "Escribe un nombre",
+      "run": "Ejecutar tool",
+      "running": "Ejecutando...",
+      "hint": "El servidor valida el input con Zod y devuelve JSON neutral para que la UI pueda localizar el texto final.",
+      "errorTitle": "La tool fallo",
+      "error": "La ejecucion de la tool fallo. Revisa los logs del host o la respuesta del servidor.",
+      "invalidResponseTitle": "Payload inesperado",
+      "invalidResponse": "La tool devolvio una estructura que la UI todavia no entiende. Ajusta el contrato compartido antes de anadir mas interfaz."
+    },
+    "result": {
+      "title": "Ultimo resultado",
+      "empty": "Ejecuta la tool para inspeccionar el payload del starter.",
+      "greeting": "Hola, {{name}}.",
+      "requestedName": "Nombre solicitado",
+      "generatedAt": "Generado en",
+      "serverTimeZone": "Zona horaria del servidor"
+    },
+    "host": {
+      "title": "Acciones con el host",
+      "description": "Estas acciones mantienen util el starter sin dividir el ejemplo en varias tools demo.",
+      "message": "Enviar mensaje",
+      "log": "Enviar log",
+      "docs": "Abrir docs de MCP",
+      "footer": "Puedes dejar o quitar estos botones segun cuanta integracion con el host necesite tu app real.",
+      "appMissing": "El bridge con el host todavia no esta listo.",
+      "messageSuccess": "Mensaje enviado al host.",
+      "logSuccess": "Log enviado al host.",
+      "docsSuccess": "Se pidio al host abrir la documentacion de MCP.",
+      "actionError": "{{action}} fallo: {{message}}",
+      "messageBody": "El starter hello-world ya esta listo para {{name}}."
+    },
+    "context": {
+      "title": "Contexto actual del host",
+      "description": "Util cuando alguien del equipo quiere entender que valores inyecta el host en la app.",
+      "tool": "Slug de la tool",
+      "locale": "Locale",
+      "timeZone": "Zona horaria",
+      "theme": "Tema",
+      "displayMode": "Modo de visualizacion",
+      "platform": "Plataforma",
+      "unknown": "No proporcionado"
+    },
+    "nextSteps": {
+      "title": "Donde personalizar primero",
+      "description": "Estos son los primeros archivos que conviene tocar para convertir el starter en un producto real.",
+      "view": "Sustituye el layout de ejemplo en",
+      "manifest": "Renombra la metadata de la tool en",
+      "server": "Cambia el contrato del servidor en",
+      "registry": "Registra o duplica tools en"
+    }
+  },
+  "tools": {
+    "voiceAssistant": "Asistente de Voz"
+  }
+}

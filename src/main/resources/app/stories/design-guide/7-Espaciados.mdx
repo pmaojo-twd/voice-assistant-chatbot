@@ -1,0 +1,61 @@
+import { Meta } from "@storybook/blocks";
+
+<Meta title="Guia de Diseno/07 Espaciados" />
+
+# Espaciados
+
+La escala de spacing del proyecto es la default de Tailwind v4 (1 unidad = `0.25rem` = `4px`).
+
+## Escala visible
+
+<div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+  {[
+    { token: "space-1", value: "4px", w: "4px" },
+    { token: "space-2", value: "8px", w: "8px" },
+    { token: "space-3", value: "12px", w: "12px" },
+    { token: "space-4", value: "16px", w: "16px" },
+    { token: "space-5", value: "20px", w: "20px" },
+    { token: "space-6", value: "24px", w: "24px" },
+    { token: "space-8", value: "32px", w: "32px" },
+    { token: "space-10", value: "40px", w: "40px" },
+    { token: "space-12", value: "48px", w: "48px" },
+    { token: "space-16", value: "64px", w: "64px" },
+  ].map((s) => (
+    <div
+      key={s.token}
+      style={{ display: "flex", alignItems: "center", gap: "12px" }}
+    >
+      <code style={{ width: "100px", fontSize: "12px" }}>{s.token}</code>
+      <code
+        style={{
+          width: "60px",
+          fontSize: "12px",
+          color: "var(--muted-foreground)",
+        }}
+      >
+        {s.value}
+      </code>
+      <div
+        style={{
+          width: s.w,
+          height: "16px",
+          background: "var(--primary)",
+          borderRadius: "2px",
+        }}
+      />
+    </div>
+  ))}
+</div>
+
+## Reglas de uso
+
+- **Densidad chat / inline cards:** `gap-2` a `gap-4`.
+- **Padding interno controles:** `px-3 py-2` (default `Button`/`Input`).
+- **Padding interno cards:** `p-4` a `p-6`.
+- **Separación entre secciones de página:** `space-y-8` o `space-y-12`.
+- **Margen de respiración alrededor de CTA principal:** mínimo `space-2` (8px).
+
+## Anti-patrones
+
+- Evita valores hardcoded (`margin: 13px`). Si necesitas un valor entre dos pasos, prefiere el más generoso.
+- No uses spacings menores que `space-1` (4px) salvo en componentes muy compactos.
