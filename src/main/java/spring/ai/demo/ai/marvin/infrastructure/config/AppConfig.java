@@ -22,7 +22,6 @@ public class AppConfig {
     public AudioPort audioPort() {
         return new JavaSoundAudioAdapter();
     }
-
     @Bean
     public VectorStore vectorStore(EmbeddingModel embeddingModel) {
         return SimpleVectorStore.builder(embeddingModel).build();
