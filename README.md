@@ -1,106 +1,57 @@
-# Voice Assistant ChatBot
+# 🎙️ Marvin: Voice Assistant Chatbot
 
-This is a Spring Boot application that serves as a voice-enabled chatbot assistant. 
-It uses [Spring AI](https://docs.spring.io/spring-ai/reference/index.html) to integrate with OpenAI and to leverages its [audio generation](https://platform.openai.com/docs/guides/audio) features to process voice inputs, and respond with audio outputs. 
-The application uses, plain, Java's Sound API for audio recording and playback.
+Marvin es un asistente de voz de vanguardia diseñado bajo una **Arquitectura Hexagonal (Puertos y Adaptadores)**, lo que permite una flexibilidad total en el intercambio de modelos y tecnologías. Está optimizado para funcionar de forma **100% local**, garantizando privacidad y baja latencia.
 
-By default, the assistant impersonates Marvin, using the [marvin.paranoid.android.txt](https://github.com/tzolov/voice-assistant-chatbot/blob/main/src/main/resources/marvin.paranoid.android.txt) system prompt.
+## 🌟 Características Principales
 
-<img src="doc/marvin-transparent.svg" width="200" align="center"/>
+- **Arquitectura Hexagonal**: Separación clara entre la lógica de dominio y las implementaciones tecnológicas.
+- **Procesamiento de Voz en Tiempo Real**: Comunicación bidireccional mediante WebSockets.
+- **Stack de IA Local**:
+  - **LLM**: Llama 3.2 vía Ollama.
+  - **STT (Speech-to-Text)**: Whisper local.
+  - **TTS (Text-to-Speech)**: Kokoro local (Voz clonada de alta fidelidad).
+- **RAG Flexible**: Soporte para búsqueda vectorial (SimpleVectorStore/Pinecone) y modos de estrategia comercial (Sales Mode).
+- **Frontend Moderno**: Interfaz SPA construida con Vite, React y TypeScript, integrada en el ciclo de vida de Maven.
 
-> Marvin - a Paranoid Android, the highly intelligent yet perpetually depressed and pessimistic robot in the Universe. 
-> With a brain the size of a planet but endlessly underwhelmed and irritated by the menial tasks given to him... 
+## 🏗️ Arquitectura del Sistema
 
-Use the `chatbot.prompt=<file-name.txt>` property to configure a different personality.
-For example the `chatbot.prompt=classpath:/psychoanalyst.txt`, will set the [psychoanalyst.txt](https://github.com/tzolov/voice-assistant-chatbot/blob/main/src/main/resources/psychoanalyst.txt) prompt to impersonate a psychoanalyst.
+El proyecto sigue los principios de diseño DDD y Hexagonal:
 
-## Features
+- **Domain**: Contiene la lógica de negocio (`VoiceAssistantService`) y los **Puertos** (interfaces) que definen las capacidades del sistema.
+- **Infrastructure**: Contiene los **Adaptadores** (implementaciones concretas):
+  - **Primary**: WebSockets para la entrada del usuario.
+  - **Secondary**: Integraciones con Ollama, Whisper, Kokoro y Vector Stores.
+- **Application**: Configuración de Spring Boot y beans.
 
-- **Voice Input and Output**: Communicates using recorded voice input and generates audio responses.
-- **Chat Memory**: Maintains context using in-memory chat memory.
-- **System Prompt**: Configurable system prompt to define the chatbot's behavior.
-- **Spring AI Integration**: Utilizes Spring AI's [ChatClient](https://docs.spring.io/spring-ai/reference/api/chatclient.html) to interact with a chat model.
+## 🚀 Flujo de Datos
 
-## Requirements
+1. **Captura**: El frontend captura audio, detecta actividad de voz (VAD) y envía el stream por WebSocket.
+2. **Transcripción**: El `AudioPort` procesa el audio usando Whisper.
+3. **Conocimiento (RAG)**: El `KnowledgePort` inyecta contexto relevante (o estrategias comerciales fijas).
+4. **Razonamiento**: `ChatClient` de Spring AI genera una respuesta inteligente.
+5. **Síntesis**: El `TtsPort` convierte el texto a audio usando Kokoro.
+6. **Respuesta**: Se envía el audio y el texto de vuelta al cliente para su reproducción inmediata.
 
-- **Java**: Java 17 or higher.
-- **Spring Boot**: Version 3.2.x or higher.
-- **Dependencies**: `spring-ai-openai-spring-boot-starter`, version `1.0.0-SNAPSHOT` or the forthcoming M5.
-- **OpenAI API Key**: Follow the Spring AI OpenAI integration [instruction](https://docs.spring.io/spring-ai/reference/api/chat/openai-chat.html) to configure your access to OpenAI.
-- **OpenAI Model**: Currently only the `gpt-4o-audio-preview` model support input/output audio modality.
+## 🛠️ Configuración y Ejecución
 
-## Getting Started
+### Requisitos Previos
+- Java 21+
+- Maven 3.9+
+- Ollama corriendo localmente (`llama3.2` y `nomic-embed-text`)
+- Servidor de Kokoro/Whisper accesible (según configuración)
 
-### Clone the Repository
+### Instalación
+1. Clona el repositorio.
+2. Configura tu archivo `.env` basado en el `.env.example`.
+3. Ejecuta el proyecto:
+   ```bash
+   ./mvnw spring-boot:run
+   ```
 
-```bash
-git clone https://github.com/your-repo/assistant-application.git
-cd assistant-application
-```
+### Modos de Funcionamiento (RAG)
+Configurable en `application.properties`:
+- `rag.mode=vector`: Usa búsqueda semántica local.
+- `rag.mode=sales`: Activa el "Modo Comercial Orion" para venta de productos.
 
-### Configuration
-
-```properties
-spring.main.web-application-type=none
-
-# System prompt message
-chatbot.prompt=classpath:/marvin.paranoid.android.txt
-
-# OpenAI API key
-spring.ai.openai.api-key=${OPENAI_API_KEY}
-
-# Set the OpenAI model
-spring.ai.openai.chat.options.model=gpt-4o-audio-preview
-
-# Output audio configuration
-spring.ai.openai.chat.options.output-modalities=text,audio
-spring.ai.openai.chat.options.output-audio.voice=ONYX
-spring.ai.openai.chat.options.output-audio.format=WAV
-```
-
-### Build the Application
-
-```bash
-./mvnw clean install
-```
-
-### Run the Application
-
-```bash
-java -jar ./target/voice-assistant-chatbot-0.0.1-SNAPSHOT.jar
-```
-
-```
- ▗▄▄▖▗▄▄▖ ▗▄▄▖ ▗▄▄▄▖▗▖  ▗▖ ▗▄▄▖     ▗▄▖ ▗▄▄▄▖                                    
-▐▌   ▐▌ ▐▌▐▌ ▐▌  █  ▐▛▚▖▐▌▐▌       ▐▌ ▐▌  █                                      
- ▝▀▚▖▐▛▀▘ ▐▛▀▚▖  █  ▐▌ ▝▜▌▐▌▝▜▌    ▐▛▀▜▌  █                                      
-▗▄▄▞▘▐▌   ▐▌ ▐▌▗▄█▄▖▐▌  ▐▌▝▚▄▞▘    ▐▌ ▐▌▗▄█▄▖                                    
-▗▄▄▖  ▗▄▖ ▗▄▄▖  ▗▄▖ ▗▖  ▗▖ ▗▄▖ ▗▄▄▄▖▗▄▄▄      ▗▄▖ ▗▖  ▗▖▗▄▄▄ ▗▄▄▖  ▗▄▖ ▗▄▄▄▖▗▄▄▄ 
-▐▌ ▐▌▐▌ ▐▌▐▌ ▐▌▐▌ ▐▌▐▛▚▖▐▌▐▌ ▐▌  █  ▐▌  █    ▐▌ ▐▌▐▛▚▖▐▌▐▌  █▐▌ ▐▌▐▌ ▐▌  █  ▐▌  █
-▐▛▀▘ ▐▛▀▜▌▐▛▀▚▖▐▛▀▜▌▐▌ ▝▜▌▐▌ ▐▌  █  ▐▌  █    ▐▛▀▜▌▐▌ ▝▜▌▐▌  █▐▛▀▚▖▐▌ ▐▌  █  ▐▌  █
-▐▌   ▐▌ ▐▌▐▌ ▐▌▐▌ ▐▌▐▌  ▐▌▝▚▄▞▘▗▄█▄▖▐▙▄▄▀    ▐▌ ▐▌▐▌  ▐▌▐▙▄▄▀▐▌ ▐▌▝▚▄▞▘▗▄█▄▖▐▙▄▄▀
-voice-assistant-chatbot:0.0.1-SNAPSHOT/Spring AI:1.0.0-SNAPSHOT/Spring Boot:3.4.0
-
-2024-12-01T11:00:11.274+01:00  INFO 31297 --- [voice-assistant-chatbot] [           main] s.a.d.a.m.VoiceAssistantApplication      : Started VoiceAssistantApplication in 0.827 seconds (process running for 1.054)
-
-Recording your question ... press <Enter> to stop!
-```
-
-### Interacting with the Assistant
-
-1. Speak your query when prompted.
-2. Press `Enter` to stop recording.
-3. Listen to the assistant’s response, which will be played back.
-
-Press `Crl+C` to exit. 
-
-## Code Overview
-
-The application consists of two classes the `VoiceAssistantApplication.java` and the utility `Audio`.
-
-The [VoiceAssistantApplication.java](https://github.com/tzolov/voice-assistant-chatbot/blob/main/src/main/java/spring/ai/demo/ai/marvin/VoiceAssistantApplication.java) is the  main class initializes the chatbot with:
-
-1. **ChatClient**: Configures the chatbot using the system prompt and an in-memory chat memory advisor.
-2. **Command Line Runner**: Implements a loop to continuously record, process, and respond to user input.
-3. **Audio Recording and Playback**: Manages voice input and output using the [Audio](https://github.com/tzolov/voice-assistant-chatbot/blob/main/src/main/java/spring/ai/demo/ai/marvin/Audio.java) utility for recording audio input from the user and playing back audio responses.
-It is a single class implementation, leveraging the pain `Java Sound API` for capturing and playback audio. 
+---
+*Hecho con ❤️ por el equipo de Advanced Agentic Coding.*
